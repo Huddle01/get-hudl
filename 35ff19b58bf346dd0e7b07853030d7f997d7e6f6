@@ -1,0 +1,23 @@
+README.md
+  4bf529951baaf9d6 1-7,9-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.6",
+  "base_commit_sha": "35ff19b58bf346dd0e7b07853030d7f997d7e6f6",
+  "prompts": {
+    "4bf529951baaf9d6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "70dd6a95-d482-4395-ae53-fac4f7d84711",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 8,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    }
+  }
+}
