@@ -40,9 +40,15 @@ func newLoginCommand() *cobra.Command {
 				return renderError(app, err)
 			}
 
+			masked := maskToken(token)
+			if app.IsTTYOut && outputMode(app) == "table" {
+				fmt.Fprintf(app.Stdout, "Logged in. API key: %s\n", masked)
+				fmt.Fprintf(app.Stdout, "Config saved to %s\n", app.Config.UserPath)
+				return nil
+			}
 			return executeResult(app, map[string]any{
 				"ok":        true,
-				"api_key":   maskToken(token),
+				"api_key":   masked,
 				"user_path": app.Config.UserPath,
 			}, nil)
 		},
@@ -51,25 +57,50 @@ func newLoginCommand() *cobra.Command {
 	return cmd
 }
 
+func authStatusRunE(cmd *cobra.Command, _ []string) error {
+	app := appFromCommand(cmd)
+	configured := app.Config.APIKey != ""
+	masked := maskToken(app.Config.APIKey)
+
+	if app.IsTTYOut && outputMode(app) == "table" {
+		if configured {
+			fmt.Fprintf(app.Stdout, "Logged in\n")
+			fmt.Fprintf(app.Stdout, "  API key:    %s\n", masked)
+		} else {
+			fmt.Fprintf(app.Stdout, "Not logged in\n")
+			fmt.Fprintf(app.Stdout, "  Run: hudl login --token <key>\n")
+		}
+		if app.Config.Workspace != "" {
+			fmt.Fprintf(app.Stdout, "  Workspace:  %s\n", app.Config.Workspace)
+		}
+		if app.Config.Region != "" {
+			fmt.Fprintf(app.Stdout, "  Region:     %s\n", app.Config.Region)
+		}
+		fmt.Fprintf(app.Stdout, "  Config:     %s\n", app.Config.UserPath)
+		return nil
+	}
+
+	return executeResult(app, map[string]any{
+		"configured": configured,
+		"api_key":    masked,
+		"workspace":  app.Config.Workspace,
+		"region":     app.Config.Region,
+		"user_path":  app.Config.UserPath,
+	}, nil)
+}
+
 func newAuthCommand() *cobra.Command {
 	auth := &cobra.Command{
 		Use:   "auth",
 		Short: "Inspect and clear local authentication state",
+		RunE:  authStatusRunE,
 	}
+
 	auth.AddCommand(
 		&cobra.Command{
 			Use:   "status",
 			Short: "Show the current authentication state",
-			RunE: func(cmd *cobra.Command, _ []string) error {
-				app := appFromCommand(cmd)
-				return executeResult(app, map[string]any{
-					"configured": app.Config.APIKey != "",
-					"api_key":    maskToken(app.Config.APIKey),
-					"workspace":  app.Config.Workspace,
-					"region":     app.Config.Region,
-					"user_path":  app.Config.UserPath,
-				}, nil)
-			},
+			RunE:  authStatusRunE,
 		},
 		&cobra.Command{
 			Use:   "clear",
@@ -78,6 +109,10 @@ func newAuthCommand() *cobra.Command {
 				app := appFromCommand(cmd)
 				if err := config.ClearUserAuth(); err != nil {
 					return renderError(app, err)
+				}
+				if app.IsTTYOut && outputMode(app) == "table" {
+					fmt.Fprintln(app.Stdout, "API key removed.")
+					return nil
 				}
 				return executeResult(app, map[string]any{"ok": true}, nil)
 			},
@@ -92,6 +127,23 @@ func newContextCommand() *cobra.Command {
 		Short: "Inspect and update workspace/region defaults",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			app := appFromCommand(cmd)
+			if app.IsTTYOut && outputMode(app) == "table" {
+				if app.Config.Workspace != "" {
+					fmt.Fprintf(app.Stdout, "Workspace:  %s\n", app.Config.Workspace)
+				} else {
+					fmt.Fprintf(app.Stdout, "Workspace:  (not set)\n")
+				}
+				if app.Config.Region != "" {
+					fmt.Fprintf(app.Stdout, "Region:     %s\n", app.Config.Region)
+				} else {
+					fmt.Fprintf(app.Stdout, "Region:     (not set)\n")
+				}
+				if app.Config.ProjectPath != "" {
+					fmt.Fprintf(app.Stdout, "Project:    %s\n", app.Config.ProjectPath)
+				}
+				fmt.Fprintf(app.Stdout, "Config:     %s\n", app.Config.UserPath)
+				return nil
+			}
 			return executeResult(app, map[string]any{
 				"workspace":    app.Config.Workspace,
 				"region":       app.Config.Region,
@@ -114,6 +166,10 @@ func newContextCommand() *cobra.Command {
 				}); err != nil {
 					return renderError(app, err)
 				}
+				if app.IsTTYOut && outputMode(app) == "table" {
+					fmt.Fprintf(app.Stdout, "Workspace set to %s\n", args[0])
+					return nil
+				}
 				return executeResult(app, map[string]any{"workspace": args[0]}, nil)
 			},
 		},
@@ -128,6 +184,10 @@ func newContextCommand() *cobra.Command {
 					return nil
 				}); err != nil {
 					return renderError(app, err)
+				}
+				if app.IsTTYOut && outputMode(app) == "table" {
+					fmt.Fprintf(app.Stdout, "Region set to %s\n", args[0])
+					return nil
 				}
 				return executeResult(app, map[string]any{"region": args[0]}, nil)
 			},
