@@ -1,0 +1,11 @@
+# Build artifacts
+hudl
+dist/
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp

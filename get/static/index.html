@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Install hudl - Huddle01 Cloud CLI</title>
+  <meta name="description" content="Install the Huddle01 Cloud CLI to manage VMs, GPUs, networks, and more from your terminal." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Install hudl - Huddle01 Cloud CLI" />
+  <meta property="og:description" content="Manage VMs, GPUs, networks, and more from your terminal. One command to install." />
+  <meta property="og:image" content="https://get.huddle01.com/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://get.huddle01.com" />
+  <meta property="og:site_name" content="Huddle01" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Install hudl - Huddle01 Cloud CLI" />
+  <meta name="twitter:description" content="Manage VMs, GPUs, networks, and more from your terminal. One command to install." />
+  <meta name="twitter:image" content="https://get.huddle01.com/og.png" />
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#000000" />
+  <link rel="canonical" href="https://get.huddle01.com" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fcfcfc;
+      --fg: #19191a;
+      --card: #ffffff;
+      --card-border: #e0e0e1;
+      --muted: #3c3c3e;
+      --dim: #8e8e90;
+      --code-bg: #0f0f0f;
+      --code-fg: #e0e0e1;
+      --accent: #19191a;
+      --accent-fg: #f0f0f0;
+      --tab-bg: #f0f0f0;
+      --tab-active-bg: #ffffff;
+      --tab-active-border: #19191a;
+      --kbd-bg: #e0e0e1;
+      --kbd-border: #cccccc;
+      --green: #22c55e;
+      --cyan: #06b6d4;
+      --yellow: #eab308;
+      --radius: 10px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #000000;
+        --fg: #f5f5f5;
+        --card: #0a0a0a;
+        --card-border: #1e1e1f;
+        --muted: #8e8e90;
+        --dim: #3c3c3e;
+        --code-bg: #0a0a0a;
+        --code-fg: #e0e0e1;
+        --accent: #f0f0f0;
+        --accent-fg: #0f0f0f;
+        --tab-bg: #0a0a0a;
+        --tab-active-bg: #1e1e1f;
+        --tab-active-border: #f0f0f0;
+        --kbd-bg: #1e1e1f;
+        --kbd-border: #2d2d2f;
+      }
+    }
+
+    body {
+      font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      padding: 80px 24px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    /* ─── Logo ─────────────────────────────────────────────────── */
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .logo.light { display: none; }
+      .logo.dark  { display: block; }
+    }
+    @media (prefers-color-scheme: light) {
+      .logo.light { display: block; }
+      .logo.dark  { display: none; }
+    }
+
+    .hero-text {
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .hero-text h1 code {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 1.875rem;
+    }
+
+    .hero-text p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* ─── Install Card ─────────────────────────────────────────── */
+    .install-card {
+      width: 100%;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--card-border);
+      background: var(--tab-bg);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .tab:hover {
+      color: var(--fg);
+    }
+
+    .tab.active {
+      color: var(--fg);
+      background: var(--tab-active-bg);
+      border-bottom-color: var(--tab-active-border);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 24px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .command-block {
+      position: relative;
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--code-fg);
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+
+    .command-block .prompt {
+      color: var(--cyan);
+      user-select: none;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: var(--kbd-bg);
+      border: 1px solid var(--kbd-border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-btn:hover {
+      color: var(--fg);
+    }
+
+    .copy-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .tab-panel .note {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    .tab-panel .note a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .tab-panel .note a:hover {
+      color: var(--fg);
+    }
+
+    /* ─── Terminal Preview ─────────────────────────────────────── */
+    .terminal {
+      width: 100%;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--code-bg);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--dim);
+      opacity: 0.4;
+    }
+
+    .terminal-title {
+      flex: 1;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .terminal-body {
+      padding: 20px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--code-fg);
+      overflow-x: auto;
+    }
+
+    .terminal-body .t-cyan  { color: #06b6d4; }
+    .terminal-body .t-green { color: #22c55e; }
+    .terminal-body .t-dim   { opacity: 0.5; }
+    .terminal-body .t-bold  { font-weight: 600; color: #ffffff; }
+    .terminal-body .t-white { color: #ffffff; }
+
+    /* ─── Features ─────────────────────────────────────────────── */
+    .features {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .features { grid-template-columns: 1fr; }
+    }
+
+    .feature {
+      padding: 20px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      background: var(--card);
+    }
+
+    .feature h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feature p {
+      font-size: 0.825rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ─── Links ─────────────────────────────────────────────── */
+    .links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .links a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 2px;
+      transition: all 0.15s;
+    }
+
+    .links a:hover {
+      color: var(--fg);
+      border-color: var(--fg);
+    }
+
+    /* ─── Footer ───────────────────────────────────────────── */
+    footer {
+      padding: 32px 24px;
+      font-size: 0.8rem;
+      color: var(--dim);
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <!-- Logo & Hero -->
+  <div class="logo-section">
+    <img class="logo dark" src="/logo.png" alt="Huddle01" />
+    <img class="logo light" src="/logo_light.png" alt="Huddle01" />
+    <div class="hero-text">
+      <h1>Install <code>hudl</code></h1>
+      <p>The Huddle01 Cloud CLI. Manage VMs, GPUs, networks, and more from your terminal.</p>
+    </div>
+  </div>
+
+  <!-- Install Commands -->
+  <div class="install-card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('macos')">macOS / Linux</button>
+      <button class="tab" onclick="switchTab('homebrew')">Homebrew</button>
+      <button class="tab" onclick="switchTab('windows')">Windows</button>
+      <button class="tab" onclick="switchTab('source')">From Source</button>
+    </div>
+    <div id="tab-macos" class="tab-panel active">
+      <div class="command-block">
+        <button class="copy-btn" onclick="copyCommand(this, 'curl -fsSL https://get.huddle01.com/hudl | sh')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          <span>Copy</span>
+        </button>
+        <span class="prompt">$ </span>curl -fsSL https://get.huddle01.com/hudl | sh
+      </div>
+      <p class="note">Detects your OS and architecture automatically. Installs to <code>/usr/local/bin</code>.</p>
+    </div>
+    <div id="tab-homebrew" class="tab-panel">
+      <div class="command-block">
+        <button class="copy-btn" onclick="copyCommand(this, 'brew install huddle01/tap/hudl')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          <span>Copy</span>
+        </button>
+        <span class="prompt">$ </span>brew install huddle01/tap/hudl
+      </div>
+      <p class="note">Updates automatically with <code>brew upgrade</code>.</p>
+    </div>
+    <div id="tab-windows" class="tab-panel">
+      <div class="command-block">
+        <button class="copy-btn" onclick="copyCommand(this, 'irm https://get.huddle01.com/hudl.ps1 | iex')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          <span>Copy</span>
+        </button>
+        <span class="prompt">PS&gt; </span>irm https://get.huddle01.com/hudl.ps1 | iex
+      </div>
+      <p class="note">Run in PowerShell. Or download the MSI from <a href="https://github.com/Huddle01/hudl/releases/latest">GitHub Releases</a>.</p>
+    </div>
+    <div id="tab-source" class="tab-panel">
+      <div class="command-block">
+        <button class="copy-btn" onclick="copyCommand(this, 'go install github.com/Huddle01/hudl/cmd/hudl@latest')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          <span>Copy</span>
+        </button>
+        <span class="prompt">$ </span>go install github.com/Huddle01/hudl/cmd/hudl@latest
+      </div>
+      <p class="note">Requires Go 1.25+. Binary installs to <code>$GOPATH/bin</code>.</p>
+    </div>
+  </div>
+
+  <!-- Terminal Preview -->
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-title">Terminal</div>
+      <div style="width: 36px;"></div>
+    </div>
+    <div class="terminal-body">
+<span class="t-dim">$</span> curl -fsSL https://get.huddle01.com/hudl | sh
+<br><br>
+<span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;██████████████████</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;████</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;██</span>&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;<span class="t-cyan">██</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;██</span>&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">██████████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;<span class="t-cyan">██</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;██</span>&nbsp;&nbsp;<span class="t-cyan">██████</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">██████</span>&nbsp;&nbsp;<span class="t-cyan">██</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;██</span>&nbsp;&nbsp;<span class="t-cyan">██████</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">██████</span>&nbsp;&nbsp;<span class="t-cyan">██</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;██</span>&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">██████████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;<span class="t-cyan">██</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;██</span>&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████████</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████</span>&nbsp;&nbsp;<span class="t-cyan">██</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;████</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-cyan">████</span>
+<br><span class="t-cyan">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;██████████████████</span>
+<br><br>
+<span class="t-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;h u d d l e 0 1</span>
+<br><span class="t-dim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Future of Compute</span>
+<br><br>
+<span class="t-cyan">&nbsp;&nbsp;info</span>&nbsp;&nbsp;Detected platform: <span class="t-white">darwin/arm64</span>
+<br><span class="t-cyan">&nbsp;&nbsp;info</span>&nbsp;&nbsp;Latest version: <span class="t-white">v0.1.0</span>
+<br><br>
+<span class="t-green">&nbsp;&nbsp;&nbsp;&nbsp;ok</span>&nbsp;&nbsp;Downloaded hudl v0.1.0 for darwin/arm64
+<br><span class="t-green">&nbsp;&nbsp;&nbsp;&nbsp;ok</span>&nbsp;&nbsp;Installed to /usr/local/bin/hudl
+<br><span class="t-green">&nbsp;&nbsp;&nbsp;&nbsp;ok</span>&nbsp;&nbsp;Verified: hudl v0.1.0
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature">
+      <h3>Virtual Machines</h3>
+      <p>Create, manage, and monitor VMs across regions.</p>
+    </div>
+    <div class="feature">
+      <h3>GPU Compute</h3>
+      <p>Deploy GPU workloads for AI/ML inference and training.</p>
+    </div>
+    <div class="feature">
+      <h3>Networking</h3>
+      <p>Floating IPs, security groups, and private networks.</p>
+    </div>
+    <div class="feature">
+      <h3>Multi-Region</h3>
+      <p>Manage infrastructure across all Huddle01 regions.</p>
+    </div>
+  </div>
+
+  <!-- Links -->
+  <div class="links">
+    <a href="https://console.huddle01.com/docs/cli">Documentation</a>
+    <a href="https://github.com/Huddle01/hudl/releases/latest">GitHub Releases</a>
+    <a href="https://console.huddle01.com">Console</a>
+  </div>
+</main>
+
+<footer>Huddle01</footer>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+function copyCommand(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const span = btn.querySelector('span');
+    span.textContent = 'Copied!';
+    setTimeout(() => { span.textContent = 'Copy'; }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
