@@ -2,7 +2,7 @@
 set -e
 
 # ─── Config ──────────────────────────────────────────────────────────────────
-REPO="Huddle01/hudl"
+REPO="Huddle01/get-hudl"
 BINARY="hudl"
 INSTALL_DIR="/usr/local/bin"
 

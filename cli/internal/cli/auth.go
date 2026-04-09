@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Huddle01/hudl/cli/internal/config"
-	"github.com/Huddle01/hudl/cli/internal/runtime"
+	"github.com/Huddle01/get-hudl/cli/internal/config"
+	"github.com/Huddle01/get-hudl/cli/internal/runtime"
 	"github.com/spf13/cobra"
 )
 

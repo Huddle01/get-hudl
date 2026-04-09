@@ -1,4 +1,4 @@
-MODULE   := github.com/Huddle01/hudl
+MODULE   := github.com/Huddle01/get-hudl
 CMD_PATH := ./cli/cmd/hudl
 BIN_NAME := hudl
 DIST_DIR := dist

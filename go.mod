@@ -1,4 +1,4 @@
-module github.com/Huddle01/hudl
+module github.com/Huddle01/get-hudl
 
 go 1.25.0
 

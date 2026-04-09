@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Huddle01/hudl/cli/internal/config"
+	"github.com/Huddle01/get-hudl/cli/internal/config"
 	"golang.org/x/term"
 )
 

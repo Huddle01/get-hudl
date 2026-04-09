@@ -34,7 +34,7 @@ irm https://get.huddle01.com/hudl.ps1 | iex
 **From source:**
 
 ```sh
-go install github.com/Huddle01/hudl/cli/cmd/hudl@latest
+go install github.com/Huddle01/get-hudl/cli/cmd/hudl@latest
 ```
 
 ## Quick start
