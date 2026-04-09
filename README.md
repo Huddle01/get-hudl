@@ -1,6 +1,22 @@
-# hudl
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="get/static/logo.png" />
+    <source media="(prefers-color-scheme: light)" srcset="get/static/logo_light.png" />
+    <img alt="Huddle01 Cloud" src="get/static/logo_light.png" width="80" />
+  </picture>
+</p>
 
-The official toolchain for [Huddle01 Cloud](https://console.huddle01.com).
+<h1 align="center">get-hudl</h1>
+
+<p align="center">
+  The official toolchain for <a href="https://console.huddle01.com">Huddle01 Cloud</a> — CLI, installer, MCP server, and agent skills.
+</p>
+
+<p align="center">
+  <a href="https://get.huddle01.com"><strong>Install</strong></a> · <a href="https://console.huddle01.com/docs/cli"><strong>Docs</strong></a> · <a href="https://console.huddle01.com"><strong>Console</strong></a>
+</p>
+
+---
 
 ## Packages
 
