@@ -1,0 +1,23 @@
+README.md
+  6ef67ef308262ee2 1-7,9-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.6",
+  "base_commit_sha": "93383efb62ee47345aa6c61752421fa94988a5fc",
+  "prompts": {
+    "6ef67ef308262ee2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ad3345d6-ebb7-423f-b771-6e947ffa2054",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 2,
+      "accepted_lines": 18,
+      "overriden_lines": 0
+    }
+  }
+}
