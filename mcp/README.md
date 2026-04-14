@@ -45,60 +45,67 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 {
   "mcpServers": {
     "huddle01": {
-      "command": "hudl-mcp"
+      "command": "hudl-mcp",
+      "env": {
+        "HUDL_API_KEY": "your-api-key"
+      }
     }
   }
 }
 ```
 
+Restart Claude Desktop after saving.
+
 </details>
 
 <details>
-<summary><strong>Claude Code</strong></summary>
+<summary><strong>Claude Code (CLI & IDE)</strong></summary>
+
+Add the server with one command:
 
 ```sh
+# Project-scoped (recommended — saved to .mcp.json)
 claude mcp add huddle01 hudl-mcp
+
+# User-scoped (available in all projects)
+claude mcp add --scope user huddle01 hudl-mcp
 ```
+
+Set your API key as an environment variable:
+
+```sh
+claude mcp add huddle01 hudl-mcp -e HUDL_API_KEY=your-api-key
+```
+
+Verify it's registered:
+
+```sh
+claude mcp list
+```
+
+</details>
+
+<details>
+<summary><strong>OpenAI Codex CLI</strong></summary>
+
+Create or edit `~/.codex/config.yaml`:
+
+```yaml
+mcp_servers:
+  - name: huddle01
+    command: hudl-mcp
+    env:
+      HUDL_API_KEY: your-api-key
+```
+
+Then run Codex — the Huddle01 tools will be available automatically.
 
 </details>
 
 <details>
 <summary><strong>Cursor</strong></summary>
 
-Add to your Cursor MCP settings (`.cursor/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "huddle01": {
-      "command": "hudl-mcp"
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><strong>VS Code</strong></summary>
-
-Add to your VS Code MCP settings (`.vscode/mcp.json`):
-
-```json
-{
-  "servers": {
-    "huddle01": {
-      "command": "hudl-mcp"
-    }
-  }
-}
-```
-
-</details>
-
-### 4. Authenticate
-
-Once connected, authenticate by calling the `hudl_login` tool with your API key. Alternatively, set the environment variable:
+Add to `.cursor/mcp.json` in your project root (or global settings):
 
 ```json
 {
@@ -113,7 +120,176 @@ Once connected, authenticate by calling the `hudl_login` tool with your API key.
 }
 ```
 
-Or configure via the CLI: `hudl auth login --token <key>`
+</details>
+
+<details>
+<summary><strong>Windsurf</strong></summary>
+
+Add to your Windsurf MCP config (`~/.codeium/windsurf/mcp_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "huddle01": {
+      "command": "hudl-mcp",
+      "env": {
+        "HUDL_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>VS Code (Copilot)</strong></summary>
+
+Add to `.vscode/mcp.json` in your workspace:
+
+```json
+{
+  "servers": {
+    "huddle01": {
+      "type": "stdio",
+      "command": "hudl-mcp",
+      "env": {
+        "HUDL_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+Or add via the command palette: `MCP: Add Server` → `stdio` → `hudl-mcp`.
+
+</details>
+
+<details>
+<summary><strong>Zed</strong></summary>
+
+Add to your Zed settings (`~/.config/zed/settings.json`):
+
+```json
+{
+  "context_servers": {
+    "huddle01": {
+      "command": {
+        "path": "hudl-mcp",
+        "args": [],
+        "env": {
+          "HUDL_API_KEY": "your-api-key"
+        }
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Continue</strong></summary>
+
+Add to your Continue config (`~/.continue/config.yaml`):
+
+```yaml
+mcpServers:
+  - name: huddle01
+    command: hudl-mcp
+    env:
+      HUDL_API_KEY: your-api-key
+```
+
+</details>
+
+### 4. Authenticate
+
+You can authenticate in three ways (in order of priority):
+
+1. **Environment variable** — set `HUDL_API_KEY` in your MCP client config (shown in examples above)
+2. **Config file** — run `hudl auth login --token <key>` (writes to `~/.hudl/config.toml`)
+3. **MCP tool** — call `hudl_login` with your API key from within the AI chat
+
+---
+
+## Using with Custom MCP Clients
+
+`hudl-mcp` speaks standard [MCP over stdio](https://modelcontextprotocol.io/docs/concepts/transports#stdio) — any MCP-compatible client can use it.
+
+### Node.js (using `@modelcontextprotocol/sdk`)
+
+```js
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+
+const transport = new StdioClientTransport({
+  command: "hudl-mcp",
+  env: { HUDL_API_KEY: process.env.HUDL_API_KEY },
+});
+
+const client = new Client({ name: "my-app", version: "1.0.0" });
+await client.connect(transport);
+
+// List all tools
+const { tools } = await client.listTools();
+console.log(`${tools.length} tools available`);
+
+// Call a tool
+const result = await client.callTool({
+  name: "hudl_vm_list",
+  arguments: {},
+});
+console.log(result.content[0].text);
+```
+
+### Python (using `mcp` SDK)
+
+```python
+import asyncio
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+async def main():
+    params = StdioServerParameters(
+        command="hudl-mcp",
+        env={"HUDL_API_KEY": "your-api-key"},
+    )
+    async with stdio_client(params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+
+            # List tools
+            tools = await session.list_tools()
+            print(f"{len(tools.tools)} tools available")
+
+            # Call a tool
+            result = await session.call_tool("hudl_vm_list", {})
+            print(result.content[0].text)
+
+asyncio.run(main())
+```
+
+### Raw JSON-RPC (any language)
+
+Spawn `hudl-mcp` and communicate via stdin/stdout using newline-delimited JSON-RPC 2.0:
+
+```bash
+# Initialize
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"my-client","version":"1.0.0"}}}' | hudl-mcp
+```
+
+```bash
+# List tools
+echo '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' | hudl-mcp
+```
+
+```bash
+# Call a tool
+echo '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"hudl_vm_list","arguments":{}}}' | hudl-mcp
+```
+
+Each message must be a single line of JSON followed by a newline. Responses are written to stdout in the same format. Diagnostic logs go to stderr.
 
 ---
 
@@ -373,11 +549,70 @@ Requires Go 1.25+.
 
 ---
 
+## Troubleshooting
+
+### Binary not found after install
+
+If `hudl-mcp` is not on your `PATH`, use the full path to the binary:
+
+```sh
+# Find where npm installed it
+npm list -g @huddle01/mcp
+# Use the full path in your MCP config
+npx hudl-mcp  # or: $(npm root -g)/@huddle01/mcp/bin/hudl-mcp
+```
+
+### `npx` as a fallback
+
+If global install isn't an option, use `npx` in your MCP client config:
+
+```json
+{
+  "mcpServers": {
+    "huddle01": {
+      "command": "npx",
+      "args": ["-y", "@huddle01/mcp"],
+      "env": {
+        "HUDL_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+### Postinstall fails (restricted network / CI)
+
+Download the binary manually and place it at `node_modules/@huddle01/mcp/bin/hudl-mcp`:
+
+```sh
+# Example for Linux x64
+curl -L -o node_modules/@huddle01/mcp/bin/hudl-mcp \
+  https://github.com/Huddle01/get-hudl/releases/latest/download/hudl-mcp-linux-amd64
+chmod +x node_modules/@huddle01/mcp/bin/hudl-mcp
+```
+
+### Authentication errors
+
+1. Verify your key is valid: `hudl auth login --token <key> && hudl auth status`
+2. Check the config file exists: `cat ~/.hudl/config.toml`
+3. Or pass the key via environment variable: `HUDL_API_KEY=<key> hudl-mcp`
+
+### Debug mode
+
+Run the binary directly to see stderr diagnostics:
+
+```sh
+HUDL_API_KEY=your-key hudl-mcp 2>debug.log
+```
+
+---
+
 ## Links
 
 - [Huddle01 Console](https://console.huddle01.com)
 - [CLI Documentation](https://console.huddle01.com/docs/cli)
 - [GitHub Repository](https://github.com/Huddle01/get-hudl)
+- [MCP Protocol Specification](https://modelcontextprotocol.io)
 
 ## License
 
