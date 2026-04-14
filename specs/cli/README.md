@@ -101,10 +101,11 @@ User config  →  Project config  →  Environment variables  →  CLI flags
 ### User Config (`~/.hudl/config.toml`)
 
 ```toml
-api_key   = "hk_abc123..."
-workspace = "my-team"
-region    = "eu2"
-output    = "table"
+api_key     = "hk_abc123..."
+gpu_api_key = "gk_xyz789..."
+workspace   = "my-team"
+region      = "eu2"
+output      = "table"
 
 [api]
 cloud_base_url = "https://cloud.huddleapis.com/api/v1"   # default
@@ -123,6 +124,7 @@ Same structure as the user config. Place in your project root to share settings 
 | Variable              | Overrides         |
 |-----------------------|-------------------|
 | `HUDL_API_KEY`        | `api_key`         |
+| `HUDL_GPU_API_KEY`    | `gpu_api_key`     |
 | `HUDL_WORKSPACE`      | `workspace`       |
 | `HUDL_REGION`         | `region`          |
 | `HUDL_OUTPUT`         | `output`          |
@@ -132,14 +134,15 @@ Same structure as the user config. Place in your project root to share settings 
 ### CLI Flags (highest precedence)
 
 ```bash
-hudl --api-key <key> --workspace <ws> --region <r> --output json vm list
+hudl --api-key <cloud-key> --gpu-api-key <gpu-key> --workspace <ws> --region <r> --output json vm list
 ```
 
 ### Global Flags
 
 | Flag                  | Short | Description                           |
 |-----------------------|-------|---------------------------------------|
-| `--api-key`           |       | API key for authentication            |
+| `--api-key`           |       | Cloud API key for authentication      |
+| `--gpu-api-key`       |       | GPU API key for authentication        |
 | `--workspace`         | `-w`  | Active workspace                      |
 | `--region`            | `-r`  | Target region                         |
 | `--output`            | `-o`  | Output format (table, json, yaml, wide, name) |
@@ -152,15 +155,26 @@ hudl --api-key <key> --workspace <ws> --region <r> --output json vm list
 
 ## Authentication
 
-### Storing a key
+### Storing keys
+
+Huddle01 uses **separate API keys** for Cloud (VMs, networks, etc.) and GPU services.
 
 ```bash
-# Interactive login
-hudl login --token hk_abc123...
+# Store both keys
+hudl login --token hk_cloud_key --gpu-token gk_gpu_key
+
+# Store only Cloud key
+hudl login --token hk_cloud_key
+
+# Store only GPU key
+hudl login --gpu-token gk_gpu_key
 
 # Or set via environment
-export HUDL_API_KEY=hk_abc123...
+export HUDL_API_KEY=hk_cloud_key
+export HUDL_GPU_API_KEY=gk_gpu_key
 ```
+
+If only `HUDL_API_KEY` is set, it will be used as a fallback for GPU requests too.
 
 ### Checking auth status
 
@@ -171,10 +185,12 @@ hudl auth status
 Output (TTY):
 
 ```
-API Key:    hk_a****************************23ef
-Workspace:  my-team
-Region:     eu2
-Config:     /Users/you/.hudl/config.toml
+Logged in
+  Cloud API key: hk_a****************************23ef
+  GPU API key:   gk_x****************************89ab
+  Workspace:  my-team
+  Region:     eu2
+  Config:     /Users/you/.hudl/config.toml
 ```
 
 ### Clearing auth
@@ -185,12 +201,12 @@ hudl auth clear
 
 ### How auth is used
 
-The CLI sends the API key differently depending on the backend:
+The CLI sends the appropriate API key depending on the backend:
 
-| Backend | Header                           |
-|---------|----------------------------------|
-| Cloud   | `X-API-Key: <key>`               |
-| GPU     | `Authorization: Bearer <key>`    |
+| Backend | Key Used    | Header                           |
+|---------|-------------|----------------------------------|
+| Cloud   | `api_key`     | `X-API-Key: <key>`             |
+| GPU     | `gpu_api_key` | `X-API-Key: <key>` + `Authorization: Bearer <key>` |
 
 ---
 
@@ -236,7 +252,7 @@ hudl vm get abc-123 -o yaml
 
 | Command                    | Description                          |
 |----------------------------|--------------------------------------|
-| `hudl login --token <key>` | Store API key                        |
+| `hudl login --token <key> [--gpu-token <key>]` | Store API keys |
 | `hudl auth status`         | Show auth state                      |
 | `hudl auth clear`          | Remove stored API key                |
 | `hudl ctx use <workspace>` | Set default workspace                |
@@ -605,8 +621,9 @@ Changes to the shared packages affect both the CLI and MCP simultaneously.
 ### Adding a new global flag
 
 1. Add the field to `runtime.GlobalOptions` in `internal/runtime/app.go`
-2. Add the env var mapping in `internal/config/config.go`
-3. Bind the flag in `root.go`'s root command setup
+2. Add the field to `config.File`, `config.Env`, `config.Flags`, and `config.Resolved` in `internal/config/config.go`
+3. Add the env var mapping in `readEnv()` and merge logic in `mergeResolved()`
+4. Bind the flag in `helpers.go`'s `addGlobalFlags()` and pass it in `newAppPersistentPreRun()`
 
 ### Testing
 

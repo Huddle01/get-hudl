@@ -51,12 +51,13 @@ func (e *HTTPError) Error() string {
 }
 
 type Client struct {
-	httpClient *http.Client
-	apiKey     string
-	cloudBase  string
-	gpuBase    string
-	stderr     io.Writer
-	verbose    bool
+	httpClient  *http.Client
+	cloudAPIKey string
+	gpuAPIKey   string
+	cloudBase   string
+	gpuBase     string
+	stderr      io.Writer
+	verbose     bool
 }
 
 func NewApp(stdin io.Reader, stdout io.Writer, stderr io.Writer, opts GlobalOptions, resolved config.Resolved) *App {
@@ -64,13 +65,18 @@ func NewApp(stdin io.Reader, stdout io.Writer, stderr io.Writer, opts GlobalOpti
 	if timeout <= 0 {
 		timeout = 30 * time.Second
 	}
+	gpuKey := resolved.GPUAPIKey
+	if gpuKey == "" {
+		gpuKey = resolved.APIKey // fallback to shared key
+	}
 	client := &Client{
-		httpClient: &http.Client{Timeout: timeout},
-		apiKey:     resolved.APIKey,
-		cloudBase:  resolved.CloudBase,
-		gpuBase:    resolved.GPUBase,
-		stderr:     stderr,
-		verbose:    opts.Verbose,
+		httpClient:  &http.Client{Timeout: timeout},
+		cloudAPIKey: resolved.APIKey,
+		gpuAPIKey:   gpuKey,
+		cloudBase:   resolved.CloudBase,
+		gpuBase:     resolved.GPUBase,
+		stderr:      stderr,
+		verbose:     opts.Verbose,
 	}
 
 	return &App{
@@ -93,7 +99,14 @@ func fileIsTTY(stream any) bool {
 }
 
 func (c *Client) Do(req Request) (map[string]any, error) {
-	if c.apiKey == "" {
+	apiKey := c.cloudAPIKey
+	if req.Backend == BackendGPU {
+		apiKey = c.gpuAPIKey
+	}
+	if apiKey == "" {
+		if req.Backend == BackendGPU {
+			return nil, fmt.Errorf("no GPU API key configured; run `hudl login --gpu-token <key>` or set HUDL_GPU_API_KEY")
+		}
 		return nil, fmt.Errorf("no API key configured; run `hudl login --token <key>` or set HUDL_API_KEY")
 	}
 
@@ -130,9 +143,9 @@ func (c *Client) Do(req Request) (map[string]any, error) {
 			return nil, err
 		}
 		httpReq.Header.Set("Accept", "application/json")
-		httpReq.Header.Set("X-API-Key", c.apiKey)
+		httpReq.Header.Set("X-API-Key", apiKey)
 		if req.Backend == BackendGPU {
-			httpReq.Header.Set("Authorization", "Bearer "+c.apiKey)
+			httpReq.Header.Set("Authorization", "Bearer "+apiKey)
 		}
 		if req.Body != nil {
 			httpReq.Header.Set("Content-Type", "application/json")

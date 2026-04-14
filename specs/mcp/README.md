@@ -152,23 +152,27 @@ The MCP server reads the same configuration as the CLI, in this priority order:
 
 ### Required Configuration
 
-At minimum, you need an API key:
+At minimum, you need an API key for each backend you want to use:
 
 ```sh
 # Option 1: Set via CLI
-hudl login --token sk_your_api_key
+hudl login --token sk_your_cloud_key --gpu-token sk_your_gpu_key
 
-# Option 2: Environment variable
-export HUDL_API_KEY=sk_your_api_key
+# Option 2: Environment variables
+export HUDL_API_KEY=sk_your_cloud_key
+export HUDL_GPU_API_KEY=sk_your_gpu_key
 
 # Option 3: Use the MCP tool itself
-# (send hudl_login tool call with token argument)
+# (send hudl_login tool call with token and/or gpu_token arguments)
 ```
+
+If only `HUDL_API_KEY` is set, it will be used as a fallback for GPU requests too.
 
 ### Config File Format
 
 ```toml
-api_key = "sk_your_api_key"
+api_key = "sk_your_cloud_api_key"
+gpu_api_key = "sk_your_gpu_api_key"
 workspace = "my-org"
 region = "eu2"
 
@@ -181,7 +185,8 @@ gpu_base_url = "https://gpu.huddleapis.com/api/v1"
 
 | Variable | Description |
 |----------|-------------|
-| `HUDL_API_KEY` | API key for authentication |
+| `HUDL_API_KEY` | Cloud API key for authentication |
+| `HUDL_GPU_API_KEY` | GPU API key for authentication (falls back to `HUDL_API_KEY`) |
 | `HUDL_WORKSPACE` | Default workspace |
 | `HUDL_REGION` | Default region |
 | `HUDL_OUTPUT` | Output format (not used by MCP, always JSON) |
@@ -260,7 +265,8 @@ If you prefer to pass the API key via environment rather than config file:
     "huddle01": {
       "command": "/absolute/path/to/hudl-mcp",
       "env": {
-        "HUDL_API_KEY": "sk_your_key",
+        "HUDL_API_KEY": "sk_your_cloud_key",
+        "HUDL_GPU_API_KEY": "sk_your_gpu_key",
         "HUDL_REGION": "eu2"
       }
     }
@@ -314,9 +320,9 @@ Examples: `hudl_vm_create`, `hudl_sg_rule_add`, `hudl_gpu_ssh_key_upload`
 
 | Tool | Description |
 |------|-------------|
-| `hudl_login` | Store API key. Required: `token` |
-| `hudl_auth_status` | Show auth state (key, workspace, region) |
-| `hudl_auth_clear` | Remove saved API key |
+| `hudl_login` | Store API keys. Optional: `token` (Cloud), `gpu_token` (GPU) |
+| `hudl_auth_status` | Show auth state (Cloud & GPU keys, workspace, region) |
+| `hudl_auth_clear` | Remove saved API keys (both Cloud and GPU) |
 | `hudl_ctx_show` | Show current workspace/region |
 | `hudl_ctx_use` | Set default workspace. Required: `workspace` |
 | `hudl_ctx_region` | Set default region. Required: `region` |
@@ -504,9 +510,9 @@ If config can't be loaded or a required field (like `region`) is missing, the er
 
 ### API Key Storage
 
-- API keys are stored in `~/.hudl/config.toml` with file permissions `0600`
+- API keys (Cloud and GPU) are stored in `~/.hudl/config.toml` with file permissions `0600`
 - Keys are never logged or written to stdout
-- The `hudl_auth_status` tool masks the key (shows first/last 4 characters)
+- The `hudl_auth_status` tool masks both keys (shows first/last 4 characters)
 
 ### Transport Security
 

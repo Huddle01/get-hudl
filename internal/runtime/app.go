@@ -12,6 +12,7 @@ type contextKey struct{}
 
 type GlobalOptions struct {
 	APIKey    string
+	GPUAPIKey string
 	Workspace string
 	Region    string
 	Output    string

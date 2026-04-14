@@ -333,6 +333,9 @@ func registerFloatingIPTools(srv *server.Server) {
 		}, []string{"id"}),
 	}, func(args map[string]any) (any, error) {
 		id := server.ArgString(args, "id")
+		if id == "" {
+			return nil, fmt.Errorf("id is required")
+		}
 		raw, err := cloudRequest("POST", "/floating-ips/"+id+"/disassociate", nil, nil, true)
 		if err != nil {
 			return nil, wrapError(err)
@@ -445,6 +448,9 @@ func registerSecurityGroupTools(srv *server.Server) {
 		}, []string{"sg_id", "direction", "ether_type"}),
 	}, func(args map[string]any) (any, error) {
 		sgID := server.ArgString(args, "sg_id")
+		if sgID == "" {
+			return nil, fmt.Errorf("sg_id is required")
+		}
 		body := map[string]any{
 			"direction":  server.ArgString(args, "direction"),
 			"ether_type": server.ArgString(args, "ether_type"),
@@ -471,6 +477,9 @@ func registerSecurityGroupTools(srv *server.Server) {
 	}, func(args map[string]any) (any, error) {
 		sgID := server.ArgString(args, "sg_id")
 		ruleID := server.ArgString(args, "rule_id")
+		if sgID == "" || ruleID == "" {
+			return nil, fmt.Errorf("sg_id and rule_id are required")
+		}
 		raw, err := cloudRequest("DELETE", "/security-groups/"+sgID+"/rules/"+ruleID, nil, nil, true)
 		if err != nil {
 			return nil, wrapError(err)
@@ -489,10 +498,7 @@ func registerNetworkTools(srv *server.Server) {
 		if err != nil {
 			return nil, wrapError(err)
 		}
-		if data, ok := raw["data"].(map[string]any); ok {
-			return data["networks"], nil
-		}
-		return []any{}, nil
+		return extractCloudList(raw, "networks"), nil
 	})
 
 	srv.RegisterTool(server.Tool{
@@ -618,14 +624,11 @@ func registerLookupTools(srv *server.Server) {
 		Description: "List available compute flavors (instance sizes and specs). Use this to find valid flavor_id values for hudl_vm_create.",
 		InputSchema: server.ObjectSchema("", map[string]any{}, nil),
 	}, func(_ map[string]any) (any, error) {
-		raw, err := cloudDo("/flavors")
+		raw, err := cloudRequest("GET", "/flavors", nil, nil, false)
 		if err != nil {
 			return nil, wrapError(err)
 		}
-		if data, ok := raw["data"].(map[string]any); ok {
-			return data["flavors"], nil
-		}
-		return []any{}, nil
+		return extractCloudList(raw, "flavors"), nil
 	})
 
 	srv.RegisterTool(server.Tool{
@@ -633,7 +636,7 @@ func registerLookupTools(srv *server.Server) {
 		Description: "List available VM images (operating systems). Use this to find valid image_id values for hudl_vm_create.",
 		InputSchema: server.ObjectSchema("", map[string]any{}, nil),
 	}, func(_ map[string]any) (any, error) {
-		raw, err := cloudDo("/images")
+		raw, err := cloudRequest("GET", "/images", nil, nil, false)
 		if err != nil {
 			return nil, wrapError(err)
 		}

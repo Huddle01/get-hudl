@@ -577,7 +577,9 @@ func newGPUWebhookUpdateCommand() *cobra.Command {
 			}
 			setMapString(body, "url", url)
 			setMapStringArray(body, "events", events)
-			body["is_active"] = isActive
+			if cmd.Flags().Changed("active") {
+				body["is_active"] = isActive
+			}
 			if mut.Interactive && app.IsTTYIn {
 				promptWebhook(app, body, false)
 			}

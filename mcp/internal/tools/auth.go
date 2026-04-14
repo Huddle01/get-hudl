@@ -19,10 +19,12 @@ func registerAuthTools(srv *server.Server) {
 		if err != nil {
 			return nil, err
 		}
-		masked := maskToken(app.Config.APIKey)
+		maskedCloud := maskToken(app.Config.APIKey)
+		maskedGPU := maskToken(app.Config.GPUAPIKey)
 		return map[string]any{
-			"configured": app.Config.APIKey != "",
-			"api_key":    masked,
+			"configured":  app.Config.APIKey != "" || app.Config.GPUAPIKey != "",
+			"api_key":     maskedCloud,
+			"gpu_api_key": maskedGPU,
 			"workspace":  app.Config.Workspace,
 			"region":     app.Config.Region,
 			"user_path":  app.Config.UserPath,
@@ -31,23 +33,37 @@ func registerAuthTools(srv *server.Server) {
 
 	srv.RegisterTool(server.Tool{
 		Name:        "hudl_login",
-		Description: "Store an API key for authenticating with Huddle01 Cloud. After calling this, all subsequent API tools will use this key.",
+		Description: "Store API keys for authenticating with Huddle01. Pass token for Cloud API key, gpu_token for GPU API key, or both.",
 		InputSchema: server.ObjectSchema("", map[string]any{
-			"token": server.StringProp("The API key to store"),
-		}, []string{"token"}),
+			"token":     server.StringProp("The Cloud API key to store"),
+			"gpu_token": server.StringProp("The GPU API key to store"),
+		}, nil),
 	}, func(args map[string]any) (any, error) {
 		token := strings.TrimSpace(server.ArgString(args, "token"))
-		if token == "" {
-			return nil, fmt.Errorf("token is required")
+		gpuToken := strings.TrimSpace(server.ArgString(args, "gpu_token"))
+		if token == "" && gpuToken == "" {
+			return nil, fmt.Errorf("at least one of token or gpu_token is required")
 		}
 		if err := config.SaveUserConfig(func(cfg *config.File) error {
-			cfg.APIKey = token
+			if token != "" {
+				cfg.APIKey = token
+			}
+			if gpuToken != "" {
+				cfg.GPUAPIKey = gpuToken
+			}
 			return nil
 		}); err != nil {
 			return nil, err
 		}
 		invalidateCache()
-		return map[string]any{"ok": true, "api_key": maskToken(token)}, nil
+		result := map[string]any{"ok": true}
+		if token != "" {
+			result["api_key"] = maskToken(token)
+		}
+		if gpuToken != "" {
+			result["gpu_api_key"] = maskToken(gpuToken)
+		}
+		return result, nil
 	})
 
 	srv.RegisterTool(server.Tool{

@@ -11,24 +11,31 @@ import (
 
 func newLoginCommand() *cobra.Command {
 	var token string
+	var gpuToken string
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Store an API key for future commands",
+		Short: "Store API keys for future commands",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			app := appFromCommand(cmd)
-			if strings.TrimSpace(token) == "" && app.IsTTYIn {
-				value, err := runtime.PromptString(app.Stdin, app.Stderr, "API key", "", true)
+			if strings.TrimSpace(token) == "" && strings.TrimSpace(gpuToken) == "" && app.IsTTYIn {
+				value, err := runtime.PromptString(app.Stdin, app.Stderr, "Cloud API key", "", true)
 				if err != nil {
 					return renderError(app, err)
 				}
 				token = value
 			}
 			token = strings.TrimSpace(token)
-			if token == "" {
-				return renderError(app, fmt.Errorf("token is required; pass --token"))
+			gpuToken = strings.TrimSpace(gpuToken)
+			if token == "" && gpuToken == "" {
+				return renderError(app, fmt.Errorf("at least one of --token or --gpu-token is required"))
 			}
 			if err := config.SaveUserConfig(func(cfg *config.File) error {
-				cfg.APIKey = token
+				if token != "" {
+					cfg.APIKey = token
+				}
+				if gpuToken != "" {
+					cfg.GPUAPIKey = gpuToken
+				}
 				if cfg.API.CloudBaseURL == "" {
 					cfg.API.CloudBaseURL = app.Config.CloudBase
 				}
@@ -40,32 +47,43 @@ func newLoginCommand() *cobra.Command {
 				return renderError(app, err)
 			}
 
-			masked := maskToken(token)
+			result := map[string]any{"ok": true, "user_path": app.Config.UserPath}
+			if token != "" {
+				result["api_key"] = maskToken(token)
+			}
+			if gpuToken != "" {
+				result["gpu_api_key"] = maskToken(gpuToken)
+			}
 			if app.IsTTYOut && outputMode(app) == "table" {
-				fmt.Fprintf(app.Stdout, "Logged in. API key: %s\n", masked)
+				if token != "" {
+					fmt.Fprintf(app.Stdout, "Cloud API key: %s\n", maskToken(token))
+				}
+				if gpuToken != "" {
+					fmt.Fprintf(app.Stdout, "GPU API key:   %s\n", maskToken(gpuToken))
+				}
 				fmt.Fprintf(app.Stdout, "Config saved to %s\n", app.Config.UserPath)
 				return nil
 			}
-			return executeResult(app, map[string]any{
-				"ok":        true,
-				"api_key":   masked,
-				"user_path": app.Config.UserPath,
-			}, nil)
+			return executeResult(app, result, nil)
 		},
 	}
-	cmd.Flags().StringVar(&token, "token", "", "API key to save")
+	cmd.Flags().StringVar(&token, "token", "", "Cloud API key to save")
+	cmd.Flags().StringVar(&gpuToken, "gpu-token", "", "GPU API key to save")
 	return cmd
 }
 
 func authStatusRunE(cmd *cobra.Command, _ []string) error {
 	app := appFromCommand(cmd)
-	configured := app.Config.APIKey != ""
-	masked := maskToken(app.Config.APIKey)
+	cloudConfigured := app.Config.APIKey != ""
+	gpuConfigured := app.Config.GPUAPIKey != ""
+	maskedCloud := maskToken(app.Config.APIKey)
+	maskedGPU := maskToken(app.Config.GPUAPIKey)
 
 	if app.IsTTYOut && outputMode(app) == "table" {
-		if configured {
+		if cloudConfigured || gpuConfigured {
 			fmt.Fprintf(app.Stdout, "Logged in\n")
-			fmt.Fprintf(app.Stdout, "  API key:    %s\n", masked)
+			fmt.Fprintf(app.Stdout, "  Cloud API key: %s\n", maskedCloud)
+			fmt.Fprintf(app.Stdout, "  GPU API key:   %s\n", maskedGPU)
 		} else {
 			fmt.Fprintf(app.Stdout, "Not logged in\n")
 			fmt.Fprintf(app.Stdout, "  Run: hudl login --token <key>\n")
@@ -81,8 +99,9 @@ func authStatusRunE(cmd *cobra.Command, _ []string) error {
 	}
 
 	return executeResult(app, map[string]any{
-		"configured": configured,
-		"api_key":    masked,
+		"configured":  cloudConfigured || gpuConfigured,
+		"api_key":     maskedCloud,
+		"gpu_api_key": maskedGPU,
 		"workspace":  app.Config.Workspace,
 		"region":     app.Config.Region,
 		"user_path":  app.Config.UserPath,

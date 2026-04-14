@@ -21,7 +21,8 @@ func addGlobalFlags(cmd *cobra.Command, opts *runtime.GlobalOptions) {
 	cmd.PersistentFlags().StringVar(&opts.Region, "region", "", "Override the active region")
 	cmd.PersistentFlags().StringVar(&opts.Workspace, "workspace", "", "Override the active workspace")
 	cmd.PersistentFlags().StringVarP(&opts.Output, "output", "o", "", "Output format: table, json, yaml, wide, name")
-	cmd.PersistentFlags().StringVar(&opts.APIKey, "api-key", "", "Override the API key for this invocation")
+	cmd.PersistentFlags().StringVar(&opts.APIKey, "api-key", "", "Override the Cloud API key for this invocation")
+	cmd.PersistentFlags().StringVar(&opts.GPUAPIKey, "gpu-api-key", "", "Override the GPU API key for this invocation")
 	cmd.PersistentFlags().DurationVar(&opts.Timeout, "timeout", 30*time.Second, "Request timeout")
 	cmd.PersistentFlags().BoolVar(&opts.Verbose, "verbose", false, "Print request diagnostics to stderr")
 	cmd.PersistentFlags().BoolVar(&opts.NoColor, "no-color", false, "Disable ANSI color output")
@@ -211,6 +212,7 @@ func newAppPersistentPreRun(stdin io.Reader, stdout, stderr io.Writer, opts *run
 	return func(cmd *cobra.Command, _ []string) error {
 		resolved, err := config.Load(config.Flags{
 			APIKey:    opts.APIKey,
+			GPUAPIKey: opts.GPUAPIKey,
 			Workspace: opts.Workspace,
 			Region:    opts.Region,
 			Output:    opts.Output,

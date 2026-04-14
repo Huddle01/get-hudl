@@ -31,6 +31,7 @@ type DefaultsConfig struct {
 
 type File struct {
 	APIKey    string         `toml:"api_key" json:"api_key,omitempty"`
+	GPUAPIKey string         `toml:"gpu_api_key" json:"gpu_api_key,omitempty"`
 	Workspace string         `toml:"workspace" json:"workspace,omitempty"`
 	Region    string         `toml:"region" json:"region,omitempty"`
 	Output    string         `toml:"output" json:"output,omitempty"`
@@ -40,6 +41,7 @@ type File struct {
 
 type Env struct {
 	APIKey    string
+	GPUAPIKey string
 	Workspace string
 	Region    string
 	Output    string
@@ -49,6 +51,7 @@ type Env struct {
 
 type Flags struct {
 	APIKey    string
+	GPUAPIKey string
 	Workspace string
 	Region    string
 	Output    string
@@ -58,6 +61,7 @@ type Flags struct {
 
 type Resolved struct {
 	APIKey      string
+	GPUAPIKey   string
 	Workspace   string
 	Region      string
 	Output      string
@@ -158,6 +162,7 @@ func SaveUserConfig(update func(*File) error) error {
 func ClearUserAuth() error {
 	return SaveUserConfig(func(cfg *File) error {
 		cfg.APIKey = ""
+		cfg.GPUAPIKey = ""
 		return nil
 	})
 }
@@ -182,6 +187,7 @@ func loadFile(path string) (File, error) {
 func readEnv() Env {
 	return Env{
 		APIKey:    strings.TrimSpace(os.Getenv("HUDL_API_KEY")),
+		GPUAPIKey: strings.TrimSpace(os.Getenv("HUDL_GPU_API_KEY")),
 		Workspace: strings.TrimSpace(os.Getenv("HUDL_WORKSPACE")),
 		Region:    strings.TrimSpace(os.Getenv("HUDL_REGION")),
 		Output:    strings.TrimSpace(os.Getenv("HUDL_OUTPUT")),
@@ -193,6 +199,7 @@ func readEnv() Env {
 func fileFromEnv(env Env) File {
 	return File{
 		APIKey:    env.APIKey,
+		GPUAPIKey: env.GPUAPIKey,
 		Workspace: env.Workspace,
 		Region:    env.Region,
 		Output:    env.Output,
@@ -206,6 +213,7 @@ func fileFromEnv(env Env) File {
 func fileFromFlags(flags Flags) File {
 	return File{
 		APIKey:    flags.APIKey,
+		GPUAPIKey: flags.GPUAPIKey,
 		Workspace: flags.Workspace,
 		Region:    flags.Region,
 		Output:    flags.Output,
@@ -219,6 +227,9 @@ func fileFromFlags(flags Flags) File {
 func mergeResolved(resolved *Resolved, cfg File) {
 	if cfg.APIKey != "" {
 		resolved.APIKey = cfg.APIKey
+	}
+	if cfg.GPUAPIKey != "" {
+		resolved.GPUAPIKey = cfg.GPUAPIKey
 	}
 	if cfg.Workspace != "" {
 		resolved.Workspace = cfg.Workspace

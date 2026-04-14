@@ -56,7 +56,7 @@ go install github.com/Huddle01/get-hudl/cli/cmd/hudl@latest
 ## Quick start
 
 ```sh
-hudl auth login
+hudl login --token <cloud-key> --gpu-token <gpu-key>
 hudl context set --workspace my-org --region eu2
 hudl vm list
 hudl vm create --name web-1 --flavor m1.small --image ubuntu-24.04
@@ -67,7 +67,7 @@ hudl gpu deploy --image nvidia/cuda --gpu a100
 
 | Command | Description |
 |---|---|
-| `hudl auth login` | Authenticate with Huddle01 Cloud |
+| `hudl login --token <cloud-key> --gpu-token <gpu-key>` | Authenticate with Huddle01 Cloud |
 | `hudl context set` | Set active workspace and region |
 | `hudl vm` | Manage virtual machines |
 | `hudl volume` | Manage block storage volumes |
@@ -107,7 +107,7 @@ Add to your MCP client config (e.g. `claude_desktop_config.json`):
 }
 ```
 
-The MCP server reads the same `~/.hudl/config.toml` and environment variables as the CLI. Authenticate first with `hudl login --token <key>`.
+The MCP server reads the same `~/.hudl/config.toml` and environment variables as the CLI. Authenticate first with `hudl login --token <cloud-key>` and/or `hudl login --gpu-token <gpu-key>`.
 
 ### Available Tools (60+)
 
@@ -137,15 +137,13 @@ The MCP server reads the same `~/.hudl/config.toml` and environment variables as
 Stored in `~/.hudl/config.toml`:
 
 ```toml
-[auth]
-token = "..."
-
-[context]
+api_key = "your-cloud-api-key"
+gpu_api_key = "your-gpu-api-key"
 workspace = "my-org"
 region = "eu2"
 ```
 
-Override with flags (`--workspace`, `--region`) or environment variables (`HUDL_WORKSPACE`, `HUDL_REGION`).
+Override with flags (`--api-key`, `--gpu-api-key`, `--workspace`, `--region`) or environment variables (`HUDL_API_KEY`, `HUDL_GPU_API_KEY`, `HUDL_WORKSPACE`, `HUDL_REGION`).
 
 ## Development
 

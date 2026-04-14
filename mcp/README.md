@@ -47,7 +47,8 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
     "huddle01": {
       "command": "hudl-mcp",
       "env": {
-        "HUDL_API_KEY": "your-api-key"
+        "HUDL_API_KEY": "your-cloud-api-key",
+        "HUDL_GPU_API_KEY": "your-gpu-api-key"
       }
     }
   }
@@ -95,7 +96,8 @@ mcp_servers:
   - name: huddle01
     command: hudl-mcp
     env:
-      HUDL_API_KEY: your-api-key
+      HUDL_API_KEY: your-cloud-api-key
+      HUDL_GPU_API_KEY: your-gpu-api-key
 ```
 
 Then run Codex — the Huddle01 tools will be available automatically.
@@ -113,7 +115,8 @@ Add to `.cursor/mcp.json` in your project root (or global settings):
     "huddle01": {
       "command": "hudl-mcp",
       "env": {
-        "HUDL_API_KEY": "your-api-key"
+        "HUDL_API_KEY": "your-cloud-api-key",
+        "HUDL_GPU_API_KEY": "your-gpu-api-key"
       }
     }
   }
@@ -133,7 +136,8 @@ Add to your Windsurf MCP config (`~/.codeium/windsurf/mcp_config.json`):
     "huddle01": {
       "command": "hudl-mcp",
       "env": {
-        "HUDL_API_KEY": "your-api-key"
+        "HUDL_API_KEY": "your-cloud-api-key",
+        "HUDL_GPU_API_KEY": "your-gpu-api-key"
       }
     }
   }
@@ -154,7 +158,8 @@ Add to `.vscode/mcp.json` in your workspace:
       "type": "stdio",
       "command": "hudl-mcp",
       "env": {
-        "HUDL_API_KEY": "your-api-key"
+        "HUDL_API_KEY": "your-cloud-api-key",
+        "HUDL_GPU_API_KEY": "your-gpu-api-key"
       }
     }
   }
@@ -198,18 +203,23 @@ mcpServers:
   - name: huddle01
     command: hudl-mcp
     env:
-      HUDL_API_KEY: your-api-key
+      HUDL_API_KEY: your-cloud-api-key
+      HUDL_GPU_API_KEY: your-gpu-api-key
 ```
 
 </details>
 
 ### 4. Authenticate
 
+Huddle01 uses **separate API keys** for Cloud (VMs, networks, etc.) and GPU services.
+
 You can authenticate in three ways (in order of priority):
 
-1. **Environment variable** — set `HUDL_API_KEY` in your MCP client config (shown in examples above)
-2. **Config file** — run `hudl auth login --token <key>` (writes to `~/.hudl/config.toml`)
-3. **MCP tool** — call `hudl_login` with your API key from within the AI chat
+1. **Environment variables** — set `HUDL_API_KEY` (Cloud) and `HUDL_GPU_API_KEY` (GPU) in your MCP client config
+2. **Config file** — run `hudl login --token <cloud-key> --gpu-token <gpu-key>` (writes to `~/.hudl/config.toml`)
+3. **MCP tool** — call `hudl_login` with `token` (Cloud) and/or `gpu_token` (GPU) from within the AI chat
+
+If only `HUDL_API_KEY` is set, it will be used as a fallback for GPU requests too.
 
 ---
 
@@ -225,7 +235,10 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 
 const transport = new StdioClientTransport({
   command: "hudl-mcp",
-  env: { HUDL_API_KEY: process.env.HUDL_API_KEY },
+  env: {
+    HUDL_API_KEY: process.env.HUDL_API_KEY,
+    HUDL_GPU_API_KEY: process.env.HUDL_GPU_API_KEY,
+  },
 });
 
 const client = new Client({ name: "my-app", version: "1.0.0" });
@@ -253,7 +266,10 @@ from mcp.client.stdio import stdio_client
 async def main():
     params = StdioServerParameters(
         command="hudl-mcp",
-        env={"HUDL_API_KEY": "your-api-key"},
+        env={
+            "HUDL_API_KEY": "your-cloud-api-key",
+            "HUDL_GPU_API_KEY": "your-gpu-api-key",
+        },
     )
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
@@ -312,9 +328,9 @@ Once connected, ask your AI assistant things like:
 
 | Tool | Description |
 |------|-------------|
-| `hudl_login` | Store API key for authentication |
-| `hudl_auth_status` | Show auth state (masked key, workspace, region) |
-| `hudl_auth_clear` | Remove saved API key |
+| `hudl_login` | Store Cloud and/or GPU API keys |
+| `hudl_auth_status` | Show auth state (masked Cloud & GPU keys, workspace, region) |
+| `hudl_auth_clear` | Remove saved API keys (both Cloud and GPU) |
 | `hudl_ctx_show` | Show current workspace and region context |
 | `hudl_ctx_use` | Set default workspace |
 | `hudl_ctx_region` | Set default region |
@@ -470,14 +486,12 @@ The MCP server reads the same configuration as the [Huddle01 CLI](https://github
 |--------|---------|
 | Config file | `~/.hudl/config.toml` |
 | Project config | `./hudl.toml` |
-| Environment variables | `HUDL_API_KEY`, `HUDL_WORKSPACE`, `HUDL_REGION` |
+| Environment variables | `HUDL_API_KEY`, `HUDL_GPU_API_KEY`, `HUDL_WORKSPACE`, `HUDL_REGION` |
 
 ```toml
 # ~/.hudl/config.toml
-[auth]
-token = "your-api-key"
-
-[context]
+api_key = "your-cloud-api-key"
+gpu_api_key = "your-gpu-api-key"
 workspace = "my-org"
 region = "eu2"
 ```
@@ -573,7 +587,8 @@ If global install isn't an option, use `npx` in your MCP client config:
       "command": "npx",
       "args": ["-y", "@huddle01/mcp"],
       "env": {
-        "HUDL_API_KEY": "your-api-key"
+        "HUDL_API_KEY": "your-cloud-api-key",
+        "HUDL_GPU_API_KEY": "your-gpu-api-key"
       }
     }
   }
@@ -593,16 +608,16 @@ chmod +x node_modules/@huddle01/mcp/bin/hudl-mcp
 
 ### Authentication errors
 
-1. Verify your key is valid: `hudl auth login --token <key> && hudl auth status`
+1. Verify your keys are valid: `hudl login --token <cloud-key> --gpu-token <gpu-key> && hudl auth status`
 2. Check the config file exists: `cat ~/.hudl/config.toml`
-3. Or pass the key via environment variable: `HUDL_API_KEY=<key> hudl-mcp`
+3. Or pass keys via environment variables: `HUDL_API_KEY=<cloud-key> HUDL_GPU_API_KEY=<gpu-key> hudl-mcp`
 
 ### Debug mode
 
 Run the binary directly to see stderr diagnostics:
 
 ```sh
-HUDL_API_KEY=your-key hudl-mcp 2>debug.log
+HUDL_API_KEY=your-cloud-key HUDL_GPU_API_KEY=your-gpu-key hudl-mcp 2>debug.log
 ```
 
 ---

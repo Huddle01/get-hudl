@@ -853,13 +853,11 @@ func newFlavorCommand() *cobra.Command {
 		Short: "List flavors",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			app := appFromCommand(cmd)
-			extract := func(raw map[string]any) (any, *runtime.Paging, error) {
-				if data, ok := raw["data"].(map[string]any); ok {
-					return data["flavors"], nil, nil
-				}
-				return []any{}, nil, nil
+			region, err := regionFromApp(app, true)
+			if err != nil {
+				return renderError(app, err)
 			}
-			return handleRequest(app, runtime.Request{Backend: runtime.BackendCloud, Method: "GET", Path: "/flavors"}, extract, runtime.MutateOptions{})
+			return handleRequest(app, runtime.Request{Backend: runtime.BackendCloud, Method: "GET", Path: "/flavors", Query: map[string]string{"region": region}}, extractCloudList("flavors"), runtime.MutateOptions{})
 		},
 	})
 	return flavor
@@ -872,10 +870,14 @@ func newImageCommand() *cobra.Command {
 		Short: "List VM images",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			app := appFromCommand(cmd)
+			region, err := regionFromApp(app, true)
+			if err != nil {
+				return renderError(app, err)
+			}
 			extract := func(raw map[string]any) (any, *runtime.Paging, error) {
 				return normalizeCloudImageGroups(raw["image_groups"]), nil, nil
 			}
-			return handleRequest(app, runtime.Request{Backend: runtime.BackendCloud, Method: "GET", Path: "/images"}, extract, runtime.MutateOptions{})
+			return handleRequest(app, runtime.Request{Backend: runtime.BackendCloud, Method: "GET", Path: "/images", Query: map[string]string{"region": region}}, extract, runtime.MutateOptions{})
 		},
 	})
 	return image
