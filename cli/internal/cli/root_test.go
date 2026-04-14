@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/Huddle01/get-hudl/cli/internal/config"
-	"github.com/Huddle01/get-hudl/cli/internal/runtime"
+	"github.com/Huddle01/get-hudl/internal/config"
+	"github.com/Huddle01/get-hudl/internal/runtime"
 )
 
 func TestRootHelpIncludesCoreCommands(t *testing.T) {

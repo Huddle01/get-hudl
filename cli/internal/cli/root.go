@@ -3,7 +3,7 @@ package cli
 import (
 	"io"
 
-	"github.com/Huddle01/get-hudl/cli/internal/runtime"
+	"github.com/Huddle01/get-hudl/internal/runtime"
 	"github.com/spf13/cobra"
 )
 

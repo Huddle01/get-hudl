@@ -24,7 +24,7 @@
 |---|---|---|
 | [`cli/`](cli/) | Command-line interface | Available |
 | [`get/`](get/) | Installer site ([get.huddle01.com](https://get.huddle01.com)) | Available |
-| `mcp/` | Model Context Protocol server | Coming soon |
+| [`mcp/`](mcp/) | Model Context Protocol server | Available |
 | `skills/` | Agent skills | Coming soon |
 
 ## Install the CLI
@@ -82,6 +82,56 @@ hudl gpu deploy --image nvidia/cuda --gpu a100
 
 Run `hudl --help` or `hudl <command> --help` for full usage.
 
+## MCP Server
+
+The `hudl-mcp` binary is a production-grade [Model Context Protocol](https://modelcontextprotocol.io) server that exposes every Huddle01 Cloud operation as an MCP tool. It communicates over stdio and works with any MCP-compatible client (Claude Desktop, Cursor, Claude Code, etc.).
+
+### Build
+
+```sh
+make build-mcp      # Build MCP server binary
+make build-all      # Build both CLI and MCP server
+```
+
+### Configure
+
+Add to your MCP client config (e.g. `claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "huddle01": {
+      "command": "/path/to/hudl-mcp"
+    }
+  }
+}
+```
+
+The MCP server reads the same `~/.hudl/config.toml` and environment variables as the CLI. Authenticate first with `hudl login --token <key>`.
+
+### Available Tools (60+)
+
+| Category | Tools |
+|---|---|
+| **Auth** | `hudl_login`, `hudl_auth_status`, `hudl_auth_clear` |
+| **Context** | `hudl_ctx_show`, `hudl_ctx_use`, `hudl_ctx_region` |
+| **VMs** | `hudl_vm_list`, `hudl_vm_get`, `hudl_vm_create`, `hudl_vm_delete`, `hudl_vm_status`, `hudl_vm_action`, `hudl_vm_attach_network` |
+| **Volumes** | `hudl_volume_list`, `hudl_volume_get`, `hudl_volume_create`, `hudl_volume_delete`, `hudl_volume_attach`, `hudl_volume_detach` |
+| **Floating IPs** | `hudl_fip_list`, `hudl_fip_get`, `hudl_fip_associate`, `hudl_fip_disassociate` |
+| **Security Groups** | `hudl_sg_list`, `hudl_sg_get`, `hudl_sg_create`, `hudl_sg_delete`, `hudl_sg_duplicate`, `hudl_sg_rule_add`, `hudl_sg_rule_delete` |
+| **Networks** | `hudl_network_list`, `hudl_network_create`, `hudl_network_delete` |
+| **SSH Keys** | `hudl_key_list`, `hudl_key_get`, `hudl_key_create`, `hudl_key_delete` |
+| **Lookup** | `hudl_flavor_list`, `hudl_image_list`, `hudl_region_list` |
+| **GPU Marketplace** | `hudl_gpu_offers`, `hudl_gpu_summary`, `hudl_gpu_check` |
+| **GPU Deployments** | `hudl_gpu_list`, `hudl_gpu_get`, `hudl_gpu_deploy`, `hudl_gpu_action`, `hudl_gpu_delete` |
+| **GPU Waitlist** | `hudl_gpu_waitlist_list`, `hudl_gpu_waitlist_add`, `hudl_gpu_waitlist_cancel` |
+| **GPU Images** | `hudl_gpu_image_list` |
+| **GPU Volumes** | `hudl_gpu_volume_list`, `hudl_gpu_volume_create`, `hudl_gpu_volume_delete` |
+| **GPU SSH Keys** | `hudl_gpu_ssh_key_list`, `hudl_gpu_ssh_key_upload`, `hudl_gpu_ssh_key_delete` |
+| **GPU API Keys** | `hudl_gpu_api_key_list`, `hudl_gpu_api_key_create`, `hudl_gpu_api_key_revoke` |
+| **GPU Webhooks** | `hudl_gpu_webhook_list`, `hudl_gpu_webhook_create`, `hudl_gpu_webhook_update`, `hudl_gpu_webhook_delete` |
+| **GPU Regions** | `hudl_gpu_region_list`, `hudl_gpu_volume_type_list` |
+
 ## Configuration
 
 Stored in `~/.hudl/config.toml`:
@@ -103,9 +153,11 @@ Override with flags (`--workspace`, `--region`) or environment variables (`HUDL_
 
 ```sh
 make build          # Build CLI binary
-make dev            # Build and run
+make build-mcp      # Build MCP server binary
+make build-all      # Build both CLI and MCP server
+make dev            # Build and run the CLI
 make test           # Run tests
-make dist           # Cross-compile all platforms
+make dist           # Cross-compile all platforms (CLI + MCP)
 make version        # Show current version & next suggestions
 make release        # Interactive release (build, tag, GitHub release)
 ```
@@ -137,17 +189,21 @@ Builds all platforms, creates git tag, uploads binaries to GitHub Releases.
 
 ```
 .
-├── cli/                       # CLI
-│   ├── cmd/hudl/              #   Entrypoint
+├── internal/
+│   ├── config/                # Config file management (shared)
+│   └── runtime/               # HTTP client, I/O, app context (shared)
+├── cli/
+│   ├── cmd/hudl/              # CLI entrypoint
+│   └── internal/cli/          # Cobra commands
+├── mcp/
+│   ├── cmd/hudl-mcp/          # MCP server entrypoint
 │   └── internal/
-│       ├── cli/               #   Cobra commands
-│       ├── config/            #   Config file management
-│       └── runtime/           #   HTTP client, I/O, app context
+│       ├── server/            # JSON-RPC / MCP protocol engine
+│       └── tools/             # Tool definitions & handlers
 ├── get/                       # get.huddle01.com
 │   └── static/
-│       ├── index.html         #   Landing page
-│       └── install.sh         #   Shell installer
-├── mcp/                       # MCP server (coming soon)
+│       ├── index.html         # Landing page
+│       └── install.sh         # Shell installer
 ├── skills/                    # Agent skills (coming soon)
 ├── Makefile
 └── go.mod
