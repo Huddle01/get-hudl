@@ -1,0 +1,33 @@
+{
+  "name": "@huddle01/mcp",
+  "version": "0.1.0-dev.f80224a",
+  "description": "Huddle01 Cloud MCP server — 67 tools for managing VMs, GPUs, networks, and more from any AI agent.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Huddle01/get-hudl"
+  },
+  "homepage": "https://github.com/Huddle01/get-hudl#mcp-server",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "huddle01",
+    "cloud",
+    "gpu",
+    "ai-tools",
+    "claude"
+  ],
+  "bin": {
+    "hudl-mcp": "./bin/cli.js"
+  },
+  "scripts": {
+    "postinstall": "node ./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
