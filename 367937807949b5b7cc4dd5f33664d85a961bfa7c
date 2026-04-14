@@ -1,0 +1,71 @@
+internal/runtime/app.go
+  3bf4f20753775ef5 1-54
+cli/internal/cli/cloud.go
+  3bf4f20753775ef5 6
+cli/internal/cli/gpu.go
+  3bf4f20753775ef5 6
+mcp/internal/tools/auth.go
+  3bf4f20753775ef5 1-132
+mcp/cmd/hudl-mcp/main.go
+  3bf4f20753775ef5 1-41
+specs/mcp/README.md
+  3bf4f20753775ef5 1-629
+cli/internal/cli/helpers.go
+  3bf4f20753775ef5 13-14
+mcp/internal/tools/cloud.go
+  3bf4f20753775ef5 1-654
+mcp/bin/cli.js
+  3bf4f20753775ef5 1-28
+internal/runtime/output.go
+  3bf4f20753775ef5 1-218
+internal/config/config.go
+  3bf4f20753775ef5 1-264
+cli/internal/cli/root.go
+  3bf4f20753775ef5 6
+README.md
+  3bf4f20753775ef5 27,85-134,156-158,160,192-199,201-202,205-206
+internal/config/config_test.go
+  3bf4f20753775ef5 1-95
+cli/internal/cli/root_test.go
+  3bf4f20753775ef5 7-8
+mcp/internal/server/server.go
+  3bf4f20753775ef5 1-294
+mcp/bin/install.js
+  3bf4f20753775ef5 1-85
+internal/runtime/input.go
+  3bf4f20753775ef5 1-131
+mcp/internal/tools/gpu.go
+  3bf4f20753775ef5 1-519
+mcp/internal/tools/tools.go
+  3bf4f20753775ef5 1-214
+internal/runtime/http.go
+  3bf4f20753775ef5 1-242
+cli/internal/cli/auth.go
+  3bf4f20753775ef5 7-8
+Makefile
+  3bf4f20753775ef5 2-3,5,15-16,18,20,22-29,39,73,83-86,103-229,285-301
+specs/cli/README.md
+  3bf4f20753775ef5 1-622
+mcp/package.json
+  3bf4f20753775ef5 1-2,4-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "367937807949b5b7cc4dd5f33664d85a961bfa7c",
+  "prompts": {
+    "3bf4f20753775ef5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "24eb74a0-d48f-4d03-ae86-d658e4417f11",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 4827,
+      "total_deletions": 360,
+      "accepted_lines": 4495,
+      "overriden_lines": 1
+    }
+  }
+}
