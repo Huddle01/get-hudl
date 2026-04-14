@@ -1,6 +1,6 @@
 {
   "name": "@huddle01/mcp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Huddle01 Cloud MCP server — 67 tools for managing VMs, GPUs, networks, and more from any AI agent.",
   "license": "MIT",
   "repository": {
