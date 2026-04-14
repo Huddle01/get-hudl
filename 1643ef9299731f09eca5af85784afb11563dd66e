@@ -1,0 +1,29 @@
+mcp/bin/install.js
+  a48fa7b43c1fc523 4-12
+mcp/package.json
+  a48fa7b43c1fc523 27-29
+mcp/bin/cli.js
+  a48fa7b43c1fc523 11-17,20-30,34-47
+mcp/bin/download.js
+  a48fa7b43c1fc523 1-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "1643ef9299731f09eca5af85784afb11563dd66e",
+  "prompts": {
+    "a48fa7b43c1fc523": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f2f49476-1d6d-4bf5-ad86-29c39e88a40c",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 178,
+      "total_deletions": 113,
+      "accepted_lines": 163,
+      "overriden_lines": 0
+    }
+  }
+}
