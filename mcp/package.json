@@ -24,7 +24,9 @@
     "postinstall": "node ./bin/install.js"
   },
   "files": [
-    "bin/",
+    "bin/cli.js",
+    "bin/install.js",
+    "bin/download.js",
     "README.md"
   ],
   "engines": {

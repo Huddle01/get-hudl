@@ -8,21 +8,41 @@ const fs = require("fs");
 const ext = process.platform === "win32" ? ".exe" : "";
 const binary = path.join(__dirname, `hudl-mcp${ext}`);
 
-if (!fs.existsSync(binary)) {
-  console.error(
-    "hudl-mcp: binary not found. Run `npm rebuild @huddle01/mcp` or reinstall the package."
-  );
-  process.exit(1);
+function isValidBinary(p) {
+  try {
+    const stat = fs.statSync(p);
+    return stat.isFile() && stat.size > 0;
+  } catch {
+    return false;
+  }
 }
 
-try {
-  execFileSync(binary, process.argv.slice(2), {
-    stdio: "inherit",
-    env: process.env,
-  });
-} catch (err) {
-  if (err.status !== undefined) {
-    process.exit(err.status);
+function run() {
+  try {
+    execFileSync(binary, process.argv.slice(2), {
+      stdio: "inherit",
+      env: process.env,
+    });
+  } catch (err) {
+    if (err.status !== undefined) {
+      process.exit(err.status);
+    }
+    throw err;
   }
-  throw err;
+}
+
+if (isValidBinary(binary)) {
+  run();
+} else {
+  console.error("hudl-mcp: binary not found, downloading automatically...");
+  const { downloadBinary } = require("./download");
+  downloadBinary()
+    .then(() => run())
+    .catch((err) => {
+      console.error(`hudl-mcp: automatic download failed: ${err.message}`);
+      console.error(
+        "hudl-mcp: install manually from https://github.com/Huddle01/get-hudl/releases"
+      );
+      process.exit(1);
+    });
 }
