@@ -149,7 +149,7 @@ mcp-publish:
 	echo ""; \
 	echo "Publishing @huddle01/mcp@$$VERSION to npm..."; \
 	echo ""; \
-	if cd $(MCP_PKG_DIR) && npm publish --access public; then \
+	if npm publish --access public; then \
 		echo ""; \
 		echo "  @huddle01/mcp@$$VERSION published!"; \
 		echo ""; \

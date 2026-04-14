@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Install hudl - Huddle01 Cloud CLI</title>
-  <meta name="description" content="Install the Huddle01 Cloud CLI to manage VMs, GPUs, networks, and more from your terminal." />
+  <title>hudl - Huddle01 Cloud Developer Tools</title>
+  <meta name="description" content="CLI and MCP server for Huddle01 Cloud. Manage VMs, GPUs, and networks from your terminal or AI agent." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Install hudl - Huddle01 Cloud CLI" />
-  <meta property="og:description" content="Manage VMs, GPUs, networks, and more from your terminal. One command to install." />
+  <meta property="og:title" content="hudl - Huddle01 Cloud Developer Tools" />
+  <meta property="og:description" content="CLI and MCP server for Huddle01 Cloud. Manage VMs, GPUs, and networks from your terminal or AI agent." />
   <meta property="og:image" content="https://get.huddle01.com/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -20,206 +20,476 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Install hudl - Huddle01 Cloud CLI" />
-  <meta name="twitter:description" content="Manage VMs, GPUs, networks, and more from your terminal. One command to install." />
+  <meta name="twitter:title" content="hudl - Huddle01 Cloud Developer Tools" />
+  <meta name="twitter:description" content="CLI and MCP server for Huddle01 Cloud. Manage VMs, GPUs, and networks from your terminal or AI agent." />
   <meta name="twitter:image" content="https://get.huddle01.com/og.png" />
 
-  <!-- Additional SEO -->
   <meta name="theme-color" content="#000000" />
   <link rel="canonical" href="https://get.huddle01.com" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #fcfcfc;
-      --fg: #19191a;
+      --bg: #fafafa;
+      --bg-subtle: #f4f4f5;
+      --fg: #09090b;
+      --fg-muted: #71717a;
+      --fg-dim: #a1a1aa;
       --card: #ffffff;
-      --card-border: #e0e0e1;
-      --muted: #3c3c3e;
-      --dim: #8e8e90;
-      --code-bg: #0f0f0f;
-      --code-fg: #e0e0e1;
-      --accent: #19191a;
-      --accent-fg: #f0f0f0;
-      --tab-bg: #f0f0f0;
-      --tab-active-bg: #ffffff;
-      --tab-active-border: #19191a;
-      --kbd-bg: #e0e0e1;
-      --kbd-border: #cccccc;
+      --card-border: #e4e4e7;
+      --card-hover: #fafafa;
+      --code-bg: #09090b;
+      --code-fg: #e4e4e7;
+      --accent: #06b6d4;
+      --accent-dim: rgba(6, 182, 212, 0.1);
       --green: #22c55e;
-      --cyan: #06b6d4;
+      --green-dim: rgba(34, 197, 94, 0.1);
       --yellow: #eab308;
-      --radius: 10px;
+      --purple: #a855f7;
+      --purple-dim: rgba(168, 85, 247, 0.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --nav-bg: rgba(250,250,250,0.8);
+      --nav-border: #e4e4e7;
+      --glow: transparent;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #000000;
-        --fg: #f5f5f5;
-        --card: #0a0a0a;
-        --card-border: #1e1e1f;
-        --muted: #8e8e90;
-        --dim: #3c3c3e;
-        --code-bg: #0a0a0a;
-        --code-fg: #e0e0e1;
-        --accent: #f0f0f0;
-        --accent-fg: #0f0f0f;
-        --tab-bg: #0a0a0a;
-        --tab-active-bg: #1e1e1f;
-        --tab-active-border: #f0f0f0;
-        --kbd-bg: #1e1e1f;
-        --kbd-border: #2d2d2f;
+        --bg: #09090b;
+        --bg-subtle: #18181b;
+        --fg: #fafafa;
+        --fg-muted: #a1a1aa;
+        --fg-dim: #52525b;
+        --card: #18181b;
+        --card-border: #27272a;
+        --card-hover: #1f1f23;
+        --code-bg: #0c0c0e;
+        --code-fg: #e4e4e7;
+        --accent-dim: rgba(6, 182, 212, 0.08);
+        --green-dim: rgba(34, 197, 94, 0.08);
+        --purple-dim: rgba(168, 85, 247, 0.08);
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+        --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+        --nav-bg: rgba(9,9,11,0.8);
+        --nav-border: #27272a;
+        --glow: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(6,182,212,0.06) 0%, transparent 70%);
       }
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'Figtree', ui-sans-serif, system-ui, sans-serif;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
       background: var(--bg);
       color: var(--fg);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    main {
-      width: 100%;
-      max-width: 720px;
-      padding: 80px 24px 60px;
+    /* ─── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--nav-border);
+    }
+
+    .nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 48px;
+      justify-content: space-between;
     }
 
-    /* ─── Logo ─────────────────────────────────────────────────── */
-    .logo-section {
+    .nav-left {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 24px;
+      gap: 10px;
     }
 
-    .logo {
-      width: 64px;
-      height: 64px;
+    .nav-logo {
+      width: 28px;
+      height: 28px;
     }
 
     @media (prefers-color-scheme: dark) {
-      .logo.light { display: none; }
-      .logo.dark  { display: block; }
+      .nav-logo.light { display: none; }
+      .nav-logo.dark  { display: block; }
     }
     @media (prefers-color-scheme: light) {
-      .logo.light { display: block; }
-      .logo.dark  { display: none; }
+      .nav-logo.light { display: block; }
+      .nav-logo.dark  { display: none; }
     }
 
-    .hero-text {
-      text-align: center;
-    }
-
-    .hero-text h1 {
-      font-size: 2rem;
+    .nav-brand {
       font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
     }
 
-    .hero-text h1 code {
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link {
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--fg-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+      background: var(--bg-subtle);
+    }
+
+    .nav-link.primary {
+      background: var(--fg);
+      color: var(--bg);
+      font-weight: 600;
+    }
+
+    .nav-link.primary:hover {
+      opacity: 0.9;
+      background: var(--fg);
+    }
+
+    /* ─── Sections ────────────────────────────────────────────── */
+    section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 80px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--glow);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--fg-muted);
+      margin-bottom: 32px;
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 3.75rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      max-width: 700px;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero .subtitle {
+      margin-top: 20px;
+      font-size: 1.15rem;
+      color: var(--fg-muted);
+      line-height: 1.7;
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      margin-top: 36px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--card-hover);
+      border-color: var(--fg-dim);
+    }
+
+    .btn-secondary svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ─── Quick Install ────────────────────────────────────────── */
+    .quick-install {
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--code-fg);
+    }
+
+    .quick-install .prompt {
+      color: var(--accent);
+      user-select: none;
+    }
+
+    .quick-install code {
+      flex: 1;
+      white-space: nowrap;
+    }
+
+    .quick-install .copy-btn-inline {
+      background: none;
+      border: none;
+      color: var(--fg-dim);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s;
+    }
+
+    .quick-install .copy-btn-inline:hover {
+      color: var(--code-fg);
+    }
+
+    .quick-install .copy-btn-inline svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ─── Product Grid ─────────────────────────────────────────── */
+    .products {
+      padding-top: 40px;
+      padding-bottom: 80px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 720px) {
+      .product-grid { grid-template-columns: 1fr; }
+    }
+
+    .product-card {
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      background: var(--card);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .product-card:hover {
+      border-color: var(--fg-dim);
+    }
+
+    .product-header {
+      padding: 28px 28px 0;
+    }
+
+    .product-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+
+    .product-icon.cli {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .product-icon.mcp {
+      background: var(--purple-dim);
+      color: var(--purple);
+    }
+
+    .product-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .product-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-dim);
+      margin-bottom: 6px;
+    }
+
+    .product-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .product-header h2 code {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 600;
-      font-size: 1.875rem;
     }
 
-    .hero-text p {
+    .product-header p {
       margin-top: 8px;
-      color: var(--muted);
-      font-size: 1.05rem;
+      font-size: 0.875rem;
+      color: var(--fg-muted);
       line-height: 1.6;
     }
 
-    /* ─── Install Card ─────────────────────────────────────────── */
-    .install-card {
-      width: 100%;
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: var(--card);
+    .product-install {
+      padding: 20px 28px 28px;
     }
 
-    .tabs {
+    /* ─── Tabs ─────────────────────────────────────────────────── */
+    .tab-row {
       display: flex;
-      border-bottom: 1px solid var(--card-border);
-      background: var(--tab-bg);
+      gap: 2px;
+      margin-bottom: 12px;
+      background: var(--bg-subtle);
+      border-radius: 6px;
+      padding: 3px;
     }
 
-    .tab {
+    .tab-btn {
       flex: 1;
-      padding: 12px 16px;
-      font-size: 0.85rem;
+      padding: 7px 12px;
+      font-size: 0.75rem;
       font-weight: 500;
-      color: var(--muted);
+      color: var(--fg-muted);
       background: none;
       border: none;
-      border-bottom: 2px solid transparent;
+      border-radius: 4px;
       cursor: pointer;
       font-family: inherit;
       transition: all 0.15s;
       text-align: center;
+      white-space: nowrap;
     }
 
-    .tab:hover {
+    .tab-btn:hover {
       color: var(--fg);
     }
 
-    .tab.active {
+    .tab-btn.active {
       color: var(--fg);
-      background: var(--tab-active-bg);
-      border-bottom-color: var(--tab-active-border);
+      background: var(--card);
+      box-shadow: var(--shadow-sm);
     }
 
-    .tab-panel {
+    .tab-content {
       display: none;
-      padding: 24px;
     }
 
-    .tab-panel.active {
+    .tab-content.active {
       display: block;
     }
 
-    .command-block {
+    /* ─── Command Block ────────────────────────────────────────── */
+    .cmd {
       position: relative;
       background: var(--code-bg);
-      border-radius: 8px;
-      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875rem;
+      font-size: 0.8rem;
       color: var(--code-fg);
-      overflow-x: auto;
       line-height: 1.6;
+      overflow-x: auto;
     }
 
-    .command-block .prompt {
-      color: var(--cyan);
+    .cmd .prompt {
+      color: var(--accent);
       user-select: none;
     }
 
-    .copy-btn {
+    .cmd .copy-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background: var(--kbd-bg);
-      border: 1px solid var(--kbd-border);
-      border-radius: 6px;
-      padding: 6px 10px;
+      top: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 5px;
+      padding: 5px 8px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--muted);
+      font-size: 0.65rem;
+      color: var(--fg-dim);
       cursor: pointer;
       transition: all 0.15s;
       display: flex;
@@ -227,46 +497,60 @@
       gap: 4px;
     }
 
-    .copy-btn:hover {
-      color: var(--fg);
+    .cmd .copy-btn:hover {
+      color: var(--code-fg);
+      background: rgba(255,255,255,0.1);
     }
 
-    .copy-btn svg {
-      width: 14px;
-      height: 14px;
+    .cmd .copy-btn svg {
+      width: 12px;
+      height: 12px;
     }
 
-    .tab-panel .note {
-      margin-top: 16px;
-      font-size: 0.85rem;
-      color: var(--dim);
+    .cmd-note {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--fg-dim);
       line-height: 1.5;
     }
 
-    .tab-panel .note a {
-      color: var(--muted);
+    .cmd-note a {
+      color: var(--fg-muted);
       text-decoration: underline;
       text-underline-offset: 2px;
     }
 
-    .tab-panel .note a:hover {
+    .cmd-note a:hover {
       color: var(--fg);
     }
 
-    /* ─── Terminal Preview ─────────────────────────────────────── */
+    /* ─── Terminal ──────────────────────────────────────────────── */
+    .terminal-section {
+      padding-bottom: 80px;
+    }
+
     .terminal {
       width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       overflow: hidden;
       background: var(--code-bg);
+      box-shadow: var(--shadow), 0 20px 60px rgba(0,0,0,0.1);
     }
 
-    .terminal-header {
+    @media (prefers-color-scheme: dark) {
+      .terminal {
+        box-shadow: var(--shadow), 0 20px 60px rgba(0,0,0,0.4);
+      }
+    }
+
+    .terminal-bar {
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 16px;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--card-border);
     }
 
@@ -274,160 +558,408 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--dim);
-      opacity: 0.4;
+      background: var(--fg-dim);
+      opacity: 0.3;
     }
 
     .terminal-title {
       flex: 1;
       text-align: center;
-      font-size: 0.75rem;
-      color: var(--dim);
+      font-size: 0.7rem;
+      color: var(--fg-dim);
       font-family: 'JetBrains Mono', monospace;
     }
 
     .terminal-body {
-      padding: 20px 24px;
+      padding: 24px 28px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      line-height: 1.7;
+      font-size: 0.78rem;
+      line-height: 1.8;
       color: var(--code-fg);
       overflow-x: auto;
     }
 
-    .terminal-body .t-cyan  { color: #06b6d4; }
-    .terminal-body .t-green { color: #22c55e; }
-    .terminal-body .t-dim   { opacity: 0.5; }
-    .terminal-body .t-bold  { font-weight: 600; color: #ffffff; }
-    .terminal-body .t-white { color: #ffffff; }
+    .t-cyan  { color: #06b6d4; }
+    .t-green { color: #22c55e; }
+    .t-purple { color: #a855f7; }
+    .t-dim   { opacity: 0.4; }
+    .t-bold  { font-weight: 600; color: #ffffff; }
+    .t-white { color: #ffffff; }
 
     /* ─── Features ─────────────────────────────────────────────── */
-    .features {
-      width: 100%;
+    .features-section {
+      padding-bottom: 80px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    .section-header p {
+      margin-top: 10px;
+      color: var(--fg-muted);
+      font-size: 1rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .features-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
 
-    @media (max-width: 520px) {
-      .features { grid-template-columns: 1fr; }
+    @media (max-width: 720px) {
+      .features-grid { grid-template-columns: 1fr 1fr; }
     }
 
-    .feature {
-      padding: 20px;
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .feat {
+      padding: 24px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      background: var(--card);
+      transition: border-color 0.2s;
+    }
+
+    .feat:hover {
+      border-color: var(--fg-dim);
+    }
+
+    .feat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 0.9rem;
+    }
+
+    .feat-icon.cyan { background: var(--accent-dim); color: var(--accent); }
+    .feat-icon.green { background: var(--green-dim); color: var(--green); }
+    .feat-icon.purple { background: var(--purple-dim); color: var(--purple); }
+
+    .feat h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .feat p {
+      font-size: 0.8rem;
+      color: var(--fg-muted);
+      line-height: 1.55;
+    }
+
+    /* ─── MCP Integrations ────────────────────────────────────── */
+    .integrations-section {
+      padding-bottom: 80px;
+    }
+
+    .integrations-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+
+    .integration-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      background: var(--card);
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--fg);
+      transition: border-color 0.2s;
+    }
+
+    .integration-chip:hover {
+      border-color: var(--fg-dim);
+    }
+
+    .integration-chip .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ─── CTA ──────────────────────────────────────────────────── */
+    .cta-section {
+      padding-bottom: 100px;
+    }
+
+    .cta-card {
+      text-align: center;
+      padding: 56px 40px;
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
       background: var(--card);
     }
 
-    .feature h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 4px;
+    .cta-card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
 
-    .feature p {
-      font-size: 0.825rem;
-      color: var(--muted);
-      line-height: 1.5;
+    .cta-card p {
+      margin-top: 10px;
+      color: var(--fg-muted);
+      font-size: 0.95rem;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    /* ─── Links ─────────────────────────────────────────────── */
-    .links {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .cta-card .hero-actions {
+      margin-top: 28px;
     }
 
-    .links a {
-      font-size: 0.875rem;
-      color: var(--muted);
-      text-decoration: none;
-      border-bottom: 1px solid var(--card-border);
-      padding-bottom: 2px;
-      transition: all 0.15s;
-    }
-
-    .links a:hover {
-      color: var(--fg);
-      border-color: var(--fg);
-    }
-
-    /* ─── Footer ───────────────────────────────────────────── */
+    /* ─── Footer ───────────────────────────────────────────────── */
     footer {
-      padding: 32px 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.825rem;
+      color: var(--fg-dim);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
       font-size: 0.8rem;
-      color: var(--dim);
+      color: var(--fg-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover {
+      color: var(--fg);
+    }
+
+    /* ─── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .hero { padding-top: 110px; padding-bottom: 60px; }
+      .nav-links .nav-link.hide-mobile { display: none; }
+      .quick-install { flex-wrap: wrap; font-size: 0.75rem; }
+      .product-header { padding: 20px 20px 0; }
+      .product-install { padding: 16px 20px 20px; }
+      .tab-btn { padding: 6px 8px; font-size: 0.7rem; }
+      .cta-card { padding: 40px 24px; }
+      footer { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-<main>
-  <!-- Logo & Hero -->
-  <div class="logo-section">
-    <img class="logo dark" src="/logo.png" alt="Huddle01" />
-    <img class="logo light" src="/logo_light.png" alt="Huddle01" />
-    <div class="hero-text">
-      <h1>Install <code>hudl</code></h1>
-      <p>The Huddle01 Cloud CLI. Manage VMs, GPUs, networks, and more from your terminal.</p>
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <img class="nav-logo dark" src="/logo.png" alt="Huddle01" />
+      <img class="nav-logo light" src="/logo_light.png" alt="Huddle01" />
+      <span class="nav-brand">hudl</span>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link hide-mobile" href="#cli">CLI</a>
+      <a class="nav-link hide-mobile" href="#mcp">MCP Server</a>
+      <a class="nav-link hide-mobile" href="https://console.huddle01.com/docs/cli">Docs</a>
+      <a class="nav-link" href="https://github.com/Huddle01/get-hudl">GitHub</a>
+      <a class="nav-link primary" href="https://console.huddle01.com">Console</a>
     </div>
   </div>
+</nav>
 
-  <!-- Install Commands -->
-  <div class="install-card">
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('macos')">macOS / Linux</button>
-      <button class="tab" onclick="switchTab('homebrew')">Homebrew</button>
-      <button class="tab" onclick="switchTab('windows')">Windows</button>
-      <button class="tab" onclick="switchTab('source')">From Source</button>
-    </div>
-    <div id="tab-macos" class="tab-panel active">
-      <div class="command-block">
-        <button class="copy-btn" onclick="copyCommand(this, 'curl -fsSL https://get.huddle01.com/hudl | sh')">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          <span>Copy</span>
-        </button>
-        <span class="prompt">$ </span>curl -fsSL https://get.huddle01.com/hudl | sh
-      </div>
-      <p class="note">Detects your OS and architecture automatically. Installs to <code>/usr/local/bin</code>.</p>
-    </div>
-    <div id="tab-homebrew" class="tab-panel">
-      <div class="command-block">
-        <button class="copy-btn" onclick="copyCommand(this, 'brew install huddle01/tap/hudl')">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          <span>Copy</span>
-        </button>
-        <span class="prompt">$ </span>brew install huddle01/tap/hudl
-      </div>
-      <p class="note">Updates automatically with <code>brew upgrade</code>.</p>
-    </div>
-    <div id="tab-windows" class="tab-panel">
-      <div class="command-block">
-        <button class="copy-btn" onclick="copyCommand(this, 'irm https://get.huddle01.com/hudl.ps1 | iex')">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          <span>Copy</span>
-        </button>
-        <span class="prompt">PS&gt; </span>irm https://get.huddle01.com/hudl.ps1 | iex
-      </div>
-      <p class="note">Run in PowerShell. Or download the MSI from <a href="https://github.com/Huddle01/get-hudl/releases/latest">GitHub Releases</a>.</p>
-    </div>
-    <div id="tab-source" class="tab-panel">
-      <div class="command-block">
-        <button class="copy-btn" onclick="copyCommand(this, 'go install github.com/Huddle01/get-hudl/cmd/hudl@latest')">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          <span>Copy</span>
-        </button>
-        <span class="prompt">$ </span>go install github.com/Huddle01/get-hudl/cmd/hudl@latest
-      </div>
-      <p class="note">Requires Go 1.25+. Binary installs to <code>$GOPATH/bin</code>.</p>
-    </div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Open Source
+  </div>
+  <h1>Huddle01 Cloud<br/><span class="gradient">Developer Tools</span></h1>
+  <p class="subtitle">CLI and MCP server for managing VMs, GPUs, and networks. From your terminal or your AI agent.</p>
+
+  <div class="hero-actions">
+    <a href="#cli" class="btn-primary">Install CLI</a>
+    <a href="#mcp" class="btn-secondary">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      MCP Server
+    </a>
   </div>
 
-  <!-- Terminal Preview -->
+  <div class="quick-install">
+    <span class="prompt">$</span>
+    <code>curl -fsSL https://get.huddle01.com/hudl | sh</code>
+    <button class="copy-btn-inline" onclick="copyCmd(this, 'curl -fsSL https://get.huddle01.com/hudl | sh')">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- Products -->
+<section class="products" id="install">
+  <div class="product-grid">
+
+    <!-- CLI Card -->
+    <div class="product-card" id="cli">
+      <div class="product-header">
+        <div class="product-icon cli">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+        </div>
+        <div class="product-label">Command Line</div>
+        <h2><code>hudl</code> CLI</h2>
+        <p>Full control over your Huddle01 Cloud resources from the terminal.</p>
+      </div>
+      <div class="product-install">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('cli', 'curl', this)">curl</button>
+          <button class="tab-btn" onclick="switchTab('cli', 'brew', this)">Homebrew</button>
+          <button class="tab-btn" onclick="switchTab('cli', 'win', this)">Windows</button>
+          <button class="tab-btn" onclick="switchTab('cli', 'src', this)">Source</button>
+        </div>
+        <div id="cli-curl" class="tab-content active">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'curl -fsSL https://get.huddle01.com/hudl | sh')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>curl -fsSL https://get.huddle01.com/hudl | sh
+          </div>
+          <p class="cmd-note">Auto-detects OS and architecture. Installs to <code>/usr/local/bin</code>.</p>
+        </div>
+        <div id="cli-brew" class="tab-content">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'brew install huddle01/tap/hudl')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>brew install huddle01/tap/hudl
+          </div>
+          <p class="cmd-note">Updates automatically with <code>brew upgrade</code>.</p>
+        </div>
+        <div id="cli-win" class="tab-content">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'irm https://get.huddle01.com/hudl.ps1 | iex')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">PS&gt; </span>irm https://get.huddle01.com/hudl.ps1 | iex
+          </div>
+          <p class="cmd-note">Run in PowerShell. Or download from <a href="https://github.com/Huddle01/get-hudl/releases/latest">GitHub Releases</a>.</p>
+        </div>
+        <div id="cli-src" class="tab-content">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'go install github.com/Huddle01/get-hudl/cmd/hudl@latest')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>go install github.com/Huddle01/get-hudl/cmd/hudl@latest
+          </div>
+          <p class="cmd-note">Requires Go 1.25+. Binary installs to <code>$GOPATH/bin</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MCP Card -->
+    <div class="product-card" id="mcp">
+      <div class="product-header">
+        <div class="product-icon mcp">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <div class="product-label">AI Agents</div>
+        <h2>MCP Server</h2>
+        <p>67 tools for AI agents. Works with Claude, Cursor, Copilot, and more.</p>
+      </div>
+      <div class="product-install">
+        <div class="tab-row">
+          <button class="tab-btn active" onclick="switchTab('mcp', 'claude', this)">Claude</button>
+          <button class="tab-btn" onclick="switchTab('mcp', 'npx', this)">npx</button>
+          <button class="tab-btn" onclick="switchTab('mcp', 'cursor', this)">Cursor</button>
+          <button class="tab-btn" onclick="switchTab('mcp', 'npm', this)">npm</button>
+        </div>
+        <div id="mcp-claude" class="tab-content active">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'claude mcp add hudl -- npx -y @huddle01/mcp')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>claude mcp add hudl -- npx -y @huddle01/mcp
+          </div>
+          <p class="cmd-note">Adds to Claude Code and Claude Desktop.</p>
+        </div>
+        <div id="mcp-npx" class="tab-content">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'npx -y @huddle01/mcp')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>npx -y @huddle01/mcp
+          </div>
+          <p class="cmd-note">Run directly. No install needed.</p>
+        </div>
+        <div id="mcp-cursor" class="tab-content">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'npx -y @huddle01/mcp --install cursor')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>npx -y @huddle01/mcp --install cursor
+          </div>
+          <p class="cmd-note">Auto-configures Cursor's MCP settings.</p>
+        </div>
+        <div id="mcp-npm" class="tab-content">
+          <div class="cmd">
+            <button class="copy-btn" onclick="copyCmd(this, 'npm install -g @huddle01/mcp')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span>Copy</span>
+            </button>
+            <span class="prompt">$ </span>npm install -g @huddle01/mcp
+          </div>
+          <p class="cmd-note">Install globally. Then run <code>hudl-mcp</code>. <a href="https://www.npmjs.com/package/@huddle01/mcp">View on npm</a>.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Terminal Preview -->
+<section class="terminal-section">
   <div class="terminal">
-    <div class="terminal-header">
+    <div class="terminal-bar">
       <div class="terminal-dot"></div>
       <div class="terminal-dot"></div>
       <div class="terminal-dot"></div>
@@ -459,50 +991,127 @@
 <br><span class="t-green">&nbsp;&nbsp;&nbsp;&nbsp;ok</span>&nbsp;&nbsp;Verified: hudl v0.1.0
     </div>
   </div>
+</section>
 
-  <!-- Features -->
-  <div class="features">
-    <div class="feature">
+<!-- Features -->
+<section class="features-section">
+  <div class="section-header">
+    <h2>Everything you need</h2>
+    <p>Full infrastructure management through the CLI and accessible to AI agents via MCP.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-icon cyan">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      </div>
       <h3>Virtual Machines</h3>
-      <p>Create, manage, and monitor VMs across regions.</p>
+      <p>Create, manage, and monitor VMs across regions with full lifecycle control.</p>
     </div>
-    <div class="feature">
+    <div class="feat">
+      <div class="feat-icon green">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M20 15h2M9 2v2M9 20v2M2 9h2M20 9h2"/></svg>
+      </div>
       <h3>GPU Compute</h3>
-      <p>Deploy GPU workloads for AI/ML inference and training.</p>
+      <p>Deploy GPU workloads for AI/ML inference and training at scale.</p>
     </div>
-    <div class="feature">
+    <div class="feat">
+      <div class="feat-icon purple">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.859a10 10 0 0 1 14 0"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/></svg>
+      </div>
       <h3>Networking</h3>
-      <p>Floating IPs, security groups, and private networks.</p>
+      <p>Floating IPs, security groups, and private networks in one place.</p>
     </div>
-    <div class="feature">
+    <div class="feat">
+      <div class="feat-icon cyan">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
       <h3>Multi-Region</h3>
-      <p>Manage infrastructure across all Huddle01 regions.</p>
+      <p>Deploy infrastructure across all Huddle01 regions worldwide.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon green">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      </div>
+      <h3>Block Storage</h3>
+      <p>Attach and manage persistent volumes for your compute workloads.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon purple">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>SSH Keys</h3>
+      <p>Manage SSH keys and security credentials across your fleet.</p>
     </div>
   </div>
+</section>
 
-  <!-- Links -->
-  <div class="links">
-    <a href="https://console.huddle01.com/docs/cli">Documentation</a>
-    <a href="https://github.com/Huddle01/get-hudl/releases/latest">GitHub Releases</a>
-    <a href="https://console.huddle01.com">Console</a>
+<!-- MCP Integrations -->
+<section class="integrations-section">
+  <div class="section-header">
+    <h2>Works with your tools</h2>
+    <p>The MCP server integrates with every major AI coding assistant.</p>
   </div>
-</main>
+  <div class="integrations-list">
+    <div class="integration-chip"><span class="chip-dot" style="background:#d97706"></span> Claude Desktop</div>
+    <div class="integration-chip"><span class="chip-dot" style="background:#06b6d4"></span> Claude Code</div>
+    <div class="integration-chip"><span class="chip-dot" style="background:#22c55e"></span> Cursor</div>
+    <div class="integration-chip"><span class="chip-dot" style="background:#3b82f6"></span> VS Code Copilot</div>
+    <div class="integration-chip"><span class="chip-dot" style="background:#8b5cf6"></span> Windsurf</div>
+    <div class="integration-chip"><span class="chip-dot" style="background:#ef4444"></span> Zed</div>
+    <div class="integration-chip"><span class="chip-dot" style="background:#f97316"></span> Continue</div>
+  </div>
+</section>
 
-<footer>Huddle01</footer>
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-card">
+    <h2>Get started in seconds</h2>
+    <p>Install the CLI or connect the MCP server to your AI agent and start building.</p>
+    <div class="hero-actions">
+      <a href="https://console.huddle01.com/docs/cli" class="btn-primary">Read the docs</a>
+      <a href="https://github.com/Huddle01/get-hudl" class="btn-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        View on GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-left">
+    <img class="nav-logo dark" src="/logo.png" alt="Huddle01" style="width:20px;height:20px" />
+    <img class="nav-logo light" src="/logo_light.png" alt="Huddle01" style="width:20px;height:20px" />
+    Huddle01
+  </div>
+  <div class="footer-links">
+    <a href="https://console.huddle01.com/docs/cli">Docs</a>
+    <a href="https://github.com/Huddle01/get-hudl/releases/latest">Releases</a>
+    <a href="https://www.npmjs.com/package/@huddle01/mcp">npm</a>
+    <a href="https://console.huddle01.com">Console</a>
+    <a href="https://github.com/Huddle01/get-hudl">GitHub</a>
+  </div>
+</footer>
 
 <script>
-function switchTab(id) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  document.getElementById('tab-' + id).classList.add('active');
+function switchTab(group, id, btn) {
+  const card = btn.closest('.product-card') || btn.closest('.product-install');
+  card.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  card.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(group + '-' + id).classList.add('active');
 }
 
-function copyCommand(btn, text) {
+function copyCmd(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
     const span = btn.querySelector('span');
-    span.textContent = 'Copied!';
-    setTimeout(() => { span.textContent = 'Copy'; }, 2000);
+    if (span) {
+      span.textContent = 'Copied!';
+      setTimeout(() => { span.textContent = 'Copy'; }, 2000);
+    } else {
+      btn.style.color = 'var(--green)';
+      setTimeout(() => { btn.style.color = ''; }, 2000);
+    }
   });
 }
 </script>
