@@ -1,0 +1,23 @@
+mcp/README.md
+  79b17d87f8fcaf77 48-51,57,62,64,67,69-98,101-102,108,114-117,126,128,132,134-137,145-146,148,152,154,164-182,187-289,292,552-609,615
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "21ab8dcc2e74b8109ac6986c3d5b403628a7ca1b",
+  "prompts": {
+    "79b17d87f8fcaf77": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e10eb31c-2d24-4246-8a9f-1994942f27d0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 247,
+      "total_deletions": 12,
+      "accepted_lines": 247,
+      "overriden_lines": 0
+    }
+  }
+}
