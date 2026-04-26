@@ -1,0 +1,282 @@
+/* ─── Ambient datacenter backdrop (hero only) ────────────── */
+.ambient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 980px;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.ambient__rack {
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  width: 320px;
+  background-image:
+    repeating-linear-gradient(0deg,
+      rgba(127, 240, 214, 0) 0px,
+      rgba(127, 240, 214, 0) 18px,
+      rgba(127, 240, 214, 0.10) 18px,
+      rgba(127, 240, 214, 0.10) 20px,
+      rgba(127, 240, 214, 0) 20px,
+      rgba(127, 240, 214, 0) 38px),
+    repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0.04) 0px,
+      rgba(255, 255, 255, 0.04) 6px,
+      transparent 6px,
+      transparent 32px);
+  filter: blur(6px);
+  mix-blend-mode: screen;
+}
+
+.ambient__rack--l { left: -80px; animation: ambient-drift-l 14s ease-in-out infinite; }
+.ambient__rack--r { right: -80px; animation: ambient-drift-r 18s ease-in-out infinite; }
+
+.ambient__haze {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  filter: blur(80px);
+  mix-blend-mode: screen;
+}
+
+.ambient__haze--1 {
+  top: -120px;
+  left: 10%;
+  background: radial-gradient(circle, rgba(127, 240, 214, 0.18), transparent 60%);
+  animation: ambient-haze 22s ease-in-out infinite;
+}
+
+.ambient__haze--2 {
+  top: 120px;
+  right: 8%;
+  background: radial-gradient(circle, rgba(91, 180, 255, 0.10), transparent 60%);
+  animation: ambient-haze 28s ease-in-out infinite reverse;
+}
+
+.ambient__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 50% 40%, transparent 0%, var(--bg) 70%);
+}
+
+/* hairline grid wash behind hero */
+.grid-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 80px 80px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 30%, black 30%, transparent 80%);
+          mask-image: radial-gradient(ellipse 80% 50% at 50% 30%, black 30%, transparent 80%);
+  opacity: 0.6;
+}
+
+@keyframes ambient-drift-l {
+  0%, 100% { transform: translate(0, 0); opacity: 0.55; }
+  50%      { transform: translate(8px, -12px); opacity: 0.8; }
+}
+
+@keyframes ambient-drift-r {
+  0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+  50%      { transform: translate(-10px, 8px); opacity: 0.85; }
+}
+
+@keyframes ambient-haze {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  50%      { transform: translate(40px, -30px) scale(1.15); opacity: 0.75; }
+}
+
+@keyframes cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes agent-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Agent chat panel (used in Things you can say) ──────── */
+.chat-panel {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0d1012;
+}
+
+.chat-panel__chrome {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  background: #15191c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chat-panel__lights {
+  display: flex;
+  gap: 6px;
+}
+
+.chat-panel__lights span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.chat-panel__lights span:nth-child(1) { background: #ff5f57; }
+.chat-panel__lights span:nth-child(2) { background: #febc2e; }
+.chat-panel__lights span:nth-child(3) { background: #28c840; }
+
+.chat-panel__title {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--mute);
+}
+
+.chat-panel__model {
+  width: 64px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  text-align: right;
+}
+
+.chat-panel__body {
+  padding: 20px 22px 28px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #0d1012;
+}
+
+.chat-msg { opacity: 0; transform: translateY(4px); transition: opacity 0.35s ease, transform 0.35s ease; }
+.chat-msg.is-shown { opacity: 1; transform: translateY(0); }
+
+.chat-msg--user {
+  align-self: flex-end;
+  max-width: 85%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.chat-msg--user .bubble {
+  background: rgba(127, 240, 214, 0.08);
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.45;
+  border: 1px solid rgba(127, 240, 214, 0.16);
+}
+
+.chat-msg--user .avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #2a2f33;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--mute);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.chat-msg--tool, .chat-msg--reply {
+  align-self: flex-start;
+  max-width: 92%;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-msg .avatar--bot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--bg);
+}
+
+.chat-tool {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+.chat-tool__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-tool__head svg { flex-shrink: 0; }
+.chat-tool__head .label { color: var(--mute); }
+.chat-tool__head .name { color: var(--ink); font-weight: 600; }
+
+.chat-tool__body {
+  padding: 10px 12px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+
+.chat-tool__args { color: rgba(127, 240, 214, 0.75); }
+.chat-tool__result { color: var(--ink); margin-top: 4px; }
+
+.chat-reply {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+  padding-top: 4px;
+}
+
+.chat-reply strong { color: #fff; font-weight: 600; }
+.chat-reply code {
+  font-family: var(--mono);
+  background: rgba(127, 240, 214, 0.10);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.chat-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--accent);
+  vertical-align: -2px;
+  animation: cursor-blink 1s infinite;
+  margin-left: 36px;
+  margin-top: -8px;
+  align-self: flex-start;
+  opacity: 0;
+}
+
+.chat-cursor.is-shown { opacity: 1; }

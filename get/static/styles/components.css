@@ -1,0 +1,419 @@
+/* ─── Buttons ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--sans);
+  transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+}
+
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); opacity: 0.9; }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line2);
+  font-weight: 500;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--mute);
+  padding: 14px 4px;
+  font-weight: 500;
+}
+
+.btn--lg {
+  padding: 16px 28px;
+  font-size: 15px;
+}
+
+/* ─── Copy button ────────────────────────────────────────── */
+.copy-btn {
+  cursor: pointer;
+  background: transparent;
+  color: var(--mute);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line2);
+  font-size: 11px;
+  font-family: var(--sans);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.copy-btn:hover { opacity: 0.9; }
+.copy-btn.is-copied {
+  opacity: 1;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ─── Code slab ──────────────────────────────────────────── */
+.code-slab {
+  background: var(--code);
+  padding: 36px 32px;
+  position: relative;
+  border-left: 2px solid var(--accent);
+  margin-top: -1px;
+}
+
+.code-slab__cmd {
+  font-family: var(--mono);
+  font-size: 17px;
+  color: #e9ecf5;
+  line-height: 1.5;
+  padding-right: 80px;
+  word-break: break-all;
+}
+
+.code-slab__copy {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+.shell-prompt { color: var(--mute); }
+.shell-cmd { color: #e5e7eb; opacity: 0.95; }
+.shell-flag { color: #a78bfa; opacity: 0.95; }
+.shell-url { color: #86efac; opacity: 0.95; }
+
+/* ─── Tabs ───────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  border-bottom: 1px solid var(--line2);
+  flex-wrap: wrap;
+}
+
+.tab {
+  position: relative;
+  padding: 0 0 14px;
+  color: var(--mute);
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: -1px;
+  background: none;
+  border: none;
+}
+
+.tab.is-active {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* ─── FAQ accordion ──────────────────────────────────────── */
+.faq-item {
+  border-top: 1px solid var(--line2);
+}
+
+.faq-item:last-child { border-bottom: 1px solid var(--line2); }
+
+.faq-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 40px 1fr 24px;
+  align-items: baseline;
+  gap: 20px;
+  padding: 28px 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.faq-toggle__num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+
+.faq-toggle__q {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 22px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.faq-toggle__icon {
+  font-size: 18px;
+  color: var(--accent);
+  text-align: right;
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+
+.faq-item.is-open .faq-toggle__icon {
+  transform: rotate(45deg);
+}
+
+.faq-body {
+  display: none;
+  grid-template-columns: 40px 1fr 24px;
+  gap: 20px;
+  padding-bottom: 28px;
+}
+
+.faq-item.is-open .faq-body { display: grid; }
+
+.faq-body__a {
+  grid-column: 2;
+  font-size: 16px;
+  color: var(--mute);
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+/* ─── Benchmark card ─────────────────────────────────────── */
+.bench-card {
+  background: var(--code);
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  padding: 24px 26px;
+}
+
+.bench-card__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.bench-card__title {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.bench-card__sub {
+  font-size: 12px;
+  color: var(--mute);
+}
+
+.bench-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bench-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.bench-row__name {
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.bench-row.is-win .bench-row__name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.bench-row__bar {
+  position: relative;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bench-row__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--accent-soft-2);
+  border-right: 1px solid rgba(127, 240, 214, 0.28);
+  transition: width 0.6s cubic-bezier(.2, .8, .2, 1);
+}
+
+.bench-row.is-win .bench-row__fill {
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(127, 240, 214, 0.87) 100%);
+  border-right: 2px solid var(--accent);
+}
+
+.bench-row__value {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.bench-row.is-win .bench-row__value {
+  color: var(--bg);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.bench-row__tag {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  z-index: 2;
+  background: var(--tag-cost-bg);
+  color: var(--tag-cost-ink);
+}
+
+.bench-row__tag.is-red {
+  background: var(--tag-red-bg);
+  color: var(--tag-red-ink);
+}
+
+@media (max-width: 700px) {
+  .bench-row { grid-template-columns: 130px 1fr; gap: 10px; }
+  .bench-row__name { font-size: 12px; }
+}
+
+/* ─── Pricing table ──────────────────────────────────────── */
+.pricing-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 56px;
+  flex-wrap: wrap;
+}
+
+.pricing-head__heading {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-size: 72px;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.pricing-head__heading .dim { color: var(--dim); }
+
+.pricing-head__stat {
+  text-align: right;
+}
+
+.pricing-head__stat-value {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-size: 56px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.pricing-head__stat-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mute);
+  margin-top: 6px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pricing-table thead tr {
+  border-bottom: 1px solid var(--line2);
+}
+
+.pricing-table th {
+  text-align: left;
+  padding: 14px 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mute);
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.pricing-table th:last-child { text-align: right; }
+
+.pricing-table tbody tr {
+  border-bottom: 1px solid var(--line);
+  transition: background 0.15s ease;
+}
+
+.pricing-table tbody tr:hover { background: var(--panel); }
+
+.pricing-table td {
+  padding: 22px 0;
+  font-size: 14px;
+  color: var(--mute);
+}
+
+.pricing-table td.cls {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-size: 22px;
+  color: var(--ink);
+}
+
+.pricing-table td.price {
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.pricing-foot {
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mute);
+}
+
+.pricing-foot a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+  .pricing-head__heading { font-size: 44px; }
+  .pricing-head__stat-value { font-size: 40px; }
+  .pricing-table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+
+/* ─── Hudl mark ──────────────────────────────────────────── */
+.hudl-mark { color: var(--accent); display: inline-block; vertical-align: middle; }
