@@ -1,0 +1,41 @@
+get/static/index.html
+  bfe8e481c74001b5 6-7,12-13,21-22,25,30,32-36,40-46,48,50-62,64,66-70,72-75,77-81,84-87,89-99,104-114,116,118-130,132-135,138-139,141-151,153-159,163-167,169-174,176-180,182-186,188-192,197-204,206-329,331-333,338-381,383-396,398-415,417-476,481,483-490,494-504,506,509-512
+get/static/styles/animations.css
+  bfe8e481c74001b5 1-282
+get/static/styles/base.css
+  bfe8e481c74001b5 1-96
+get/static/js/faq.js
+  bfe8e481c74001b5 1-13
+get/static/styles/sections.css
+  bfe8e481c74001b5 1-564
+get/static/styles/tokens.css
+  bfe8e481c74001b5 1-32
+get/static/js/setup-tabs.js
+  bfe8e481c74001b5 1-17
+get/static/js/agent-chat.js
+  bfe8e481c74001b5 1-119
+get/static/js/copy.js
+  bfe8e481c74001b5 1-40
+get/static/styles/components.css
+  bfe8e481c74001b5 1-419
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "410adf4056c1410e089b8acf782214c95c232dfd",
+  "prompts": {
+    "bfe8e481c74001b5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f7bfb921-64fa-444e-bfbb-dcb758f8e324",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 2316,
+      "total_deletions": 1226,
+      "accepted_lines": 2019,
+      "overriden_lines": 0
+    }
+  }
+}
