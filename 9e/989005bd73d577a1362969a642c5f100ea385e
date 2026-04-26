@@ -1,0 +1,25 @@
+get/static/index.html
+  bfe8e481c74001b5 80-81
+get/static/styles/sections.css
+  bfe8e481c74001b5 35-36,45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "9e989005bd73d577a1362969a642c5f100ea385e",
+  "prompts": {
+    "bfe8e481c74001b5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f7bfb921-64fa-444e-bfbb-dcb758f8e324",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 3,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
