@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hudl — Huddle01 Cloud Developer Tools</title>
-  <meta name="description" content="CLI and MCP server for Huddle01 Cloud. Manage VMs, GPUs, and networks from your terminal or AI agent." />
+  <title>Huddle01 VMs — Virtual Machines for Agents</title>
+  <meta name="description" content="Chat with Claude, Cursor or Antigravity to spin up a VM. MCP-native infra: AMD EPYC, NVMe, unlimited egress, per-second billing." />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
 
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="hudl — Huddle01 Cloud Developer Tools" />
-  <meta property="og:description" content="CLI and MCP server for Huddle01 Cloud. Manage VMs, GPUs, and networks from your terminal or AI agent." />
+  <meta property="og:title" content="Huddle01 VMs — Virtual Machines for Agents" />
+  <meta property="og:description" content="Chat with Claude, Cursor or Antigravity to spin up a VM. MCP-native cloud infra." />
   <meta property="og:image" content="https://get.huddle01.com/og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -18,1110 +18,497 @@
   <meta property="og:site_name" content="Huddle01" />
 
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="hudl — Huddle01 Cloud Developer Tools" />
-  <meta name="twitter:description" content="CLI and MCP server for Huddle01 Cloud. Manage VMs, GPUs, and networks from your terminal or AI agent." />
+  <meta name="twitter:title" content="Huddle01 VMs — Virtual Machines for Agents" />
+  <meta name="twitter:description" content="Chat with Claude, Cursor or Antigravity to spin up a VM. MCP-native cloud infra." />
   <meta name="twitter:image" content="https://get.huddle01.com/og.png" />
 
-  <meta name="theme-color" content="#0a0e1e" />
+  <meta name="theme-color" content="#0a0d0f" />
   <link rel="canonical" href="https://get.huddle01.com" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0a0e1e;
-      --paper: #111630;
-      --ink: #f0f3ff;
-      --mute: #8891b8;
-      --dim: #5c6389;
-      --line: rgba(240, 243, 255, 0.1);
-      --line-strong: rgba(240, 243, 255, 0.16);
-      --accent: #4d8bff;
-      --accent-2: #8ab2ff;
-      --term: #05070f;
-      --term-fg: #f4ede0;
-      --term-line: rgba(255, 255, 255, 0.06);
-      --ok: #86efac;
-      --warn: #fbbf77;
-      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      --display: 'Fraunces', 'GT Sectra', 'Tiempos Headline', Georgia, serif;
-      --mono: 'JetBrains Mono', 'Berkeley Mono', ui-monospace, Menlo, monospace;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--ink);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-feature-settings: 'ss01', 'cv11';
-    }
-
-    a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; }
-
-    .display {
-      font-family: var(--display);
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-    }
-
-    .mono { font-family: var(--mono); }
-
-    .eyebrow {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--mute);
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .eyebrow .rule {
-      width: 24px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .accent { color: var(--accent); }
-    .italic { font-style: italic; }
-
-    .shell {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-
-    section.block {
-      border-bottom: 1px solid var(--line);
-      padding: 72px 48px;
-    }
-
-    /* ─── Nav ─────────────────────────────────────────────────── */
-    nav.top {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: var(--bg);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      padding: 18px 48px;
-      gap: 12px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .brand img.logo {
-      height: 22px;
-      width: auto;
-      display: block;
-    }
-
-    .brand .slash {
-      color: var(--mute);
-      font-family: var(--mono);
-      font-size: 13px;
-      font-weight: 400;
-      margin-left: 2px;
-    }
-
-    .nav-spacer { flex: 1; }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      font-size: 14px;
-      color: var(--mute);
-    }
-
-    .nav-links a { transition: color 0.15s ease; }
-    .nav-links a:hover { color: var(--ink); }
-
-    .btn {
-      cursor: pointer;
-      border: none;
-      font-family: inherit;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-      text-align: center;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      background: var(--ink);
-      color: var(--bg);
-      padding: 9px 18px;
-      border-radius: 999px;
-      font-size: 13px;
-    }
-    .btn-primary:hover { opacity: 0.9; }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--ink);
-      border: 1px solid var(--line-strong);
-      padding: 13px 24px;
-      border-radius: 999px;
-      font-size: 14px;
-    }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent-2); }
-
-    .btn-lg {
-      padding: 14px 26px;
-      border-radius: 999px;
-      font-size: 14px;
-    }
-
-    /* ─── Hero ─────────────────────────────────────────────────── */
-    .hero {
-      padding: 72px 48px 88px;
-      border-bottom: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 56px;
-      align-items: center;
-    }
-
-    .hero h1 {
-      font-family: var(--display);
-      font-weight: 500;
-      font-size: clamp(3rem, 7vw, 5.25rem);
-      line-height: 0.95;
-      margin: 24px 0 24px;
-      letter-spacing: -0.03em;
-    }
-
-    .hero h1 .italic {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .hero .subtitle {
-      font-size: 19px;
-      line-height: 1.5;
-      color: var(--mute);
-      max-width: 460px;
-      margin-bottom: 36px;
-    }
-
-    .install-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--term);
-      border-radius: 10px;
-      border: 1px solid rgba(77, 139, 255, 0.14);
-      padding: 14px 16px 14px 18px;
-      max-width: 520px;
-    }
-
-    .install-bar code {
-      font-family: var(--mono);
-      font-size: 15px;
-      color: var(--term-fg);
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .install-bar .prompt { color: rgba(255, 255, 255, 0.4); }
-
-    .copy-pill {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .copy-pill:hover { opacity: 0.9; }
-    .copy-pill.copied { background: var(--ok); color: var(--bg); }
-
-    .hero-meta {
-      display: flex;
-      gap: 24px;
-      margin-top: 32px;
-      color: var(--mute);
-      font-size: 13px;
-    }
-    .hero-meta .spacer { flex: 1; }
-    .hero-meta .tool-count {
-      color: var(--accent);
-      font-family: var(--mono);
-    }
-
-    /* ─── Terminal demo ─────────────────────────────────────────── */
-    .terminal {
-      background: var(--term);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-    }
-
-    .terminal .bar {
-      display: flex;
-      align-items: center;
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--term-line);
-      gap: 6px;
-    }
-
-    .terminal .dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 6px;
-    }
-    .dot-r { background: #ff5f57; }
-    .dot-y { background: #febc2e; }
-    .dot-g { background: #28c840; }
-
-    .terminal .bar .title {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
-      margin-left: 12px;
-    }
-
-    .terminal .body {
-      padding: 22px 24px 28px;
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--term-fg);
-      line-height: 1.55;
-      min-height: 320px;
-    }
-
-    .term-line { white-space: pre; }
-    .term-prompt { color: rgba(255, 255, 255, 0.4); }
-    .term-cursor {
-      display: inline-block;
-      width: 7px;
-      height: 14px;
-      background: var(--term-fg);
-      vertical-align: -2px;
-      margin-left: 1px;
-      animation: blink 1s steps(2, start) infinite;
-    }
-    @keyframes blink { to { visibility: hidden; } }
-
-    .term-ascii {
-      color: var(--accent);
-      white-space: pre;
-      font-size: 10.5px;
-      line-height: 1.1;
-      margin: 14px 0 0;
-    }
-
-    .term-brand {
-      color: rgba(255, 255, 255, 0.75);
-      letter-spacing: 0.18em;
-      margin-top: 10px;
-      font-size: 11px;
-      text-transform: lowercase;
-    }
-
-    .term-log { margin-top: 14px; }
-    .term-log > div { padding: 1px 0; }
-    .log-info  { color: var(--accent); }
-    .log-ok    { color: var(--ok); }
-    .log-val   { color: var(--warn); }
-
-    .term-log .hidden { visibility: hidden; }
-    .term-log .reveal { animation: fadeIn 0.25s ease both; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
-
-    /* ─── Quick start ──────────────────────────────────────────── */
-    .q-header {
-      margin-bottom: 48px;
-    }
-    .q-header h2 {
-      font-family: var(--display);
-      font-size: 44px;
-      margin: 18px 0 0;
-      max-width: 680px;
-      line-height: 1.02;
-    }
-
-    .q-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
-
-    .q-step { border-top: 1px solid var(--line); padding-top: 20px; }
-    .q-step .row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .q-step .num {
-      font-family: var(--display);
-      font-size: 54px;
-      line-height: 1;
-      color: var(--accent);
-    }
-    .q-step .tag {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--mute);
-    }
-    .q-step h3 {
-      font-family: var(--display);
-      font-size: 22px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    .q-step p {
-      font-size: 15px;
-      color: var(--mute);
-      line-height: 1.5;
-    }
-    .q-step p code {
-      font-family: var(--mono);
-      color: var(--ink);
-      background: rgba(77, 139, 255, 0.1);
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-
-    /* ─── Two-col install sections ─────────────────────────────── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 64px;
-    }
-
-    .two-col.paper { background: var(--paper); }
-
-    .section-intro h2 {
-      font-family: var(--display);
-      font-size: 54px;
-      line-height: 1;
-      margin: 18px 0 20px;
-      font-weight: 500;
-    }
-
-    .section-intro p {
-      font-size: 16px;
-      color: var(--mute);
-      line-height: 1.55;
-      max-width: 320px;
-    }
-
-    .client-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 24px;
-    }
-    .client-chips span {
-      font-family: var(--mono);
-      font-size: 11px;
-      padding: 5px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--mute);
-    }
-
-    .tab-row {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 0;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      padding: 14px 20px;
-      cursor: pointer;
-      color: var(--mute);
-      font-size: 14px;
-      font-family: inherit;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      font-weight: 400;
-      transition: color 0.15s ease, border-color 0.15s ease;
-    }
-    .tab-btn:hover { color: var(--ink); }
-    .tab-btn.active {
-      color: var(--ink);
-      border-bottom-color: var(--accent);
-      font-weight: 500;
-    }
-
-    .tab-cmd {
-      background: var(--term);
-      padding: 28px 32px;
-      position: relative;
-    }
-
-    .tab-cmd code {
-      font-family: var(--mono);
-      font-size: 16px;
-      color: var(--term-fg);
-      line-height: 1.4;
-    }
-
-    .tab-cmd .prompt { color: rgba(255, 255, 255, 0.4); }
-
-    .tab-cmd .copy-ghost {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: transparent;
-      border: 1px solid rgba(244, 237, 224, 0.4);
-      color: var(--term-fg);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      opacity: 0.55;
-      transition: opacity 0.15s ease, background 0.15s ease;
-    }
-    .tab-cmd .copy-ghost:hover { opacity: 1; background: rgba(255, 255, 255, 0.06); }
-    .tab-cmd .copy-ghost.copied { color: var(--ok); border-color: var(--ok); opacity: 1; }
-
-    .tab-note {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--mute);
-      margin-top: 14px;
-      letter-spacing: 0.01em;
-    }
-    .tab-note .arrow { color: var(--accent); }
-    .tab-note a {
-      color: var(--accent-2);
-      border-bottom: 1px dashed rgba(138, 178, 255, 0.4);
-    }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* ─── Products catalog ─────────────────────────────────────── */
-    .cat-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 48px;
-    }
-    .cat-header h2 {
-      font-family: var(--display);
-      font-size: 54px;
-      margin: 14px 0 0;
-      font-weight: 500;
-      line-height: 1;
-    }
-    .cat-count {
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--mute);
-    }
-
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .tool {
-      padding: 36px 28px 44px;
-      border-bottom: 1px solid var(--line);
-      border-right: 1px solid var(--line);
-      position: relative;
-      transition: background 0.2s ease;
-      cursor: pointer;
-    }
-    .tool:nth-child(-n + 3) { border-top: 1px solid var(--line); }
-    .tool:nth-child(3n) { border-right: none; }
-    .tool:hover { background: var(--paper); }
-
-    .tool .idx {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
-    .tool h3 {
-      font-family: var(--display);
-      font-size: 26px;
-      font-weight: 500;
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
-    }
-    .tool p {
-      font-size: 15px;
-      color: var(--mute);
-      line-height: 1.5;
-      margin-bottom: 20px;
-      min-height: 66px;
-    }
-    .tool .foot {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .tool .tag {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--mute);
-      padding: 4px 8px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-    }
-    .tool .arrow {
-      color: var(--accent);
-      font-size: 18px;
-      transition: transform 0.2s ease;
-    }
-    .tool:hover .arrow { transform: translateX(4px); }
-
-    /* ─── Changelog ────────────────────────────────────────────── */
-    .changelog-row {
-      padding: 24px 0;
-      border-bottom: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 140px 80px 1fr;
-      gap: 24px;
-      align-items: baseline;
-    }
-    .changelog-row:last-child { border-bottom: none; }
-    .changelog-row .v {
-      font-family: var(--mono);
-      font-size: 15px;
-      color: var(--accent);
-      font-weight: 500;
-    }
-    .changelog-row .date {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--mute);
-    }
-    .changelog-row ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .changelog-row li {
-      font-size: 15px;
-      padding: 3px 0;
-    }
-    .changelog-row li::before {
-      content: '—';
-      color: var(--mute);
-      margin-right: 10px;
-    }
-
-    /* ─── FAQ ──────────────────────────────────────────────────── */
-    .faq-item { border-bottom: 1px solid var(--line); }
-    .faq-btn {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: transparent;
-      border: none;
-      padding: 22px 0;
-      cursor: pointer;
-      color: var(--ink);
-      text-align: left;
-      font-family: inherit;
-    }
-    .faq-btn .q {
-      font-family: var(--display);
-      font-size: 19px;
-      font-weight: 500;
-    }
-    .faq-btn .plus {
-      font-size: 22px;
-      color: var(--accent);
-      transition: transform 0.2s ease;
-      line-height: 1;
-    }
-    .faq-item.open .plus { transform: rotate(45deg); }
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease;
-      font-size: 15px;
-      color: var(--mute);
-      line-height: 1.6;
-      max-width: 620px;
-    }
-    .faq-item.open .faq-answer {
-      max-height: 260px;
-      padding: 0 0 22px;
-    }
-    .faq-answer code {
-      font-family: var(--mono);
-      color: var(--ink);
-      background: rgba(77, 139, 255, 0.1);
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-    .faq-answer a {
-      color: var(--accent-2);
-      border-bottom: 1px dashed rgba(138, 178, 255, 0.4);
-    }
-
-    /* ─── CTA ──────────────────────────────────────────────────── */
-    .cta {
-      padding: 96px 48px;
-      text-align: center;
-    }
-    .cta h2 {
-      font-family: var(--display);
-      font-size: clamp(3rem, 6vw, 4.5rem);
-      line-height: 1;
-      margin: 18px auto 28px;
-      max-width: 820px;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-    }
-    .cta .actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 32px;
-      flex-wrap: wrap;
-    }
-
-    /* ─── Footer ───────────────────────────────────────────────── */
-    footer {
-      padding: 40px 48px;
-      border-top: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      font-size: 13px;
-      color: var(--mute);
-    }
-
-    footer .left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    footer .left img { height: 18px; width: auto; }
-
-    footer .links {
-      display: flex;
-      gap: 24px;
-      margin-left: auto;
-    }
-    footer .links a:hover { color: var(--ink); }
-
-    footer .copy {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--dim);
-    }
-
-    /* ─── Responsive ───────────────────────────────────────────── */
-    @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 28px 72px; }
-      .two-col { grid-template-columns: 1fr; gap: 32px; }
-      section.block { padding: 56px 28px; }
-      .cat-grid { grid-template-columns: repeat(2, 1fr); }
-      .tool:nth-child(3n) { border-right: 1px solid var(--line); }
-      .tool:nth-child(2n) { border-right: none; }
-      .tool:nth-child(-n + 3) { border-top: none; }
-      .tool:nth-child(-n + 2) { border-top: 1px solid var(--line); }
-      .nav-inner { padding: 14px 24px; }
-      .nav-links { gap: 18px; }
-      .changelog-row { grid-template-columns: 100px 80px 1fr; gap: 16px; }
-      .cta { padding: 72px 28px; }
-      footer { padding: 32px 28px; flex-wrap: wrap; }
-      .cat-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-    }
-
-    @media (max-width: 640px) {
-      .hero h1 { font-size: 48px; }
-      .cat-grid { grid-template-columns: 1fr; }
-      .tool { border-right: none !important; }
-      .tool:nth-child(-n + 2) { border-top: none; }
-      .tool:first-child { border-top: 1px solid var(--line); }
-      .q-grid { grid-template-columns: 1fr; gap: 20px; }
-      .section-intro h2 { font-size: 40px; }
-      .cat-header h2 { font-size: 40px; }
-      .nav-links .hide-mobile { display: none; }
-      .hero-meta { flex-wrap: wrap; }
-      .tab-btn { padding: 12px 14px; font-size: 13px; }
-      .tab-cmd { padding: 24px 20px; }
-      .tab-cmd code { font-size: 13px; word-break: break-all; white-space: normal; }
-      .tab-cmd .copy-ghost { position: static; margin-top: 12px; }
-      .install-bar code { font-size: 13px; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/styles/tokens.css" />
+  <link rel="stylesheet" href="/styles/base.css" />
+  <link rel="stylesheet" href="/styles/components.css" />
+  <link rel="stylesheet" href="/styles/sections.css" />
+  <link rel="stylesheet" href="/styles/animations.css" />
 </head>
 <body>
 
-<!-- Nav -->
-<nav class="top">
-  <div class="nav-inner">
-    <a href="#" class="brand">
-      <img class="logo" src="https://cloudobjects.huddle01.media/full_logo_light.png" alt="Huddle01" />
-    </a>
-    <div class="nav-spacer"></div>
-    <div class="nav-links">
-      <a class="hide-mobile" href="#mcp">MCP</a>
-      <a class="hide-mobile" href="#products">Products</a>
-      <a class="hide-mobile" href="#faq">FAQ</a>
-      <a href="https://github.com/Huddle01/get-hudl">GitHub</a>
-      <a class="btn btn-primary" href="https://console.huddle01.com">Console →</a>
-    </div>
+  <!-- ─── Ambient datacenter backdrop (hero only) ──────────────── -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__rack ambient__rack--l"></div>
+    <div class="ambient__rack ambient__rack--r"></div>
+    <div class="ambient__haze ambient__haze--1"></div>
+    <div class="ambient__haze ambient__haze--2"></div>
+    <div class="ambient__vignette"></div>
   </div>
-</nav>
+  <div class="grid-wash" aria-hidden="true"></div>
 
-<div class="shell">
+  <!-- ─── Nav ──────────────────────────────────────────────────── -->
+  <nav class="nav">
+    <a href="/" class="nav__brand">
+      <img class="nav__logo" src="https://cloudobjects.huddle01.media/full_logo_light.png" alt="Huddle01" />
+    </a>
+    <div class="nav__spacer"></div>
+    <div class="nav__links">
+      <a href="#pricing">Pricing</a>
+      <a href="https://docs.huddle01.com" target="_blank" rel="noopener">Docs</a>
+      <a href="https://discord.gg/huddle01" target="_blank" rel="noopener">Discord</a>
+      <a href="https://console.huddle01.com" target="_blank" rel="noopener" class="nav__cta">Console</a>
+    </div>
+  </nav>
 
-  <!-- Hero -->
+  <!-- ─── Hero ─────────────────────────────────────────────────── -->
   <section class="hero">
-    <div>
-      <h1>Cloud infra,<br /><span class="italic">one line</span> away.</h1>
-      <p class="subtitle">CLI and MCP server for Huddle01 Cloud.</p>
+    <a class="ph-chip" href="https://www.producthunt.com/products/huddle01" target="_blank" rel="noopener">
+      <svg class="ph-chip__cat" width="18" height="18" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#da552f"/><path d="M22.7 13.3h-7v13.4h3.4v-3.8h3.6c2.7 0 4.8-2.2 4.8-4.8s-2.1-4.8-4.8-4.8zm-.2 6.8h-3.4v-3.9h3.4c1.1 0 2 .9 2 1.9s-.9 2-2 2z" fill="#fff"/></svg>
+      <span class="ph-chip__text">We just launched on Product Hunt</span>
+      <span class="ph-chip__arrow" aria-hidden="true">→</span>
+    </a>
 
-      <div class="install-bar">
-        <code><span class="prompt">$ </span>curl -fsSL https://get.huddle01.com/hudl | sh</code>
-        <button class="copy-pill" data-copy="curl -fsSL https://get.huddle01.com/hudl | sh">Copy</button>
-      </div>
+    <h1 class="hero__headline">
+      Virtual Machines<br>
+      <span class="dim">for </span><span class="accent">Agents.</span>
+    </h1>
 
-      <div class="hero-meta">
-        <span>⌘ macOS</span>
-        <span>☖ Linux</span>
-        <span>⊞ Windows</span>
-        <span class="spacer"></span>
-        <span class="tool-count">67 MCP tools</span>
-      </div>
+    <p class="hero__sub">Chat with Claude, Cursor or Antigravity. Boot a VM.</p>
+
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="#setup">Try it on Claude</a>
+      <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
     </div>
 
-    <div class="terminal" aria-hidden="true">
-      <div class="bar">
-        <span class="dot dot-r"></span>
-        <span class="dot dot-y"></span>
-        <span class="dot dot-g"></span>
-        <span class="title">~/ · zsh</span>
+    <div class="hero__strip">
+      <div class="hero__strip-cell">
+        <div class="hero__strip-key">AMD EPYC</div>
+        <div class="hero__strip-val">Dedicated vCPU</div>
       </div>
-      <div class="body">
-        <div class="term-line"><span class="term-prompt">$ </span><span id="typed"></span><span id="cursor" class="term-cursor"></span></div>
-        <div id="after" class="hidden">
-          <pre class="term-ascii">              ██████████████████
-          ████                    ████
-        ██  ████    ████████    ████  ██
-      ██  ██████                ██████  ██
-      ██  ██████                ██████  ██
-        ██  ████    ████████    ████  ██
-          ████                    ████
-              ██████████████████</pre>
-          <div class="term-brand">h u d d l e 0 1</div>
-          <div class="term-log">
-            <div><span class="log-info">info  </span>Detected platform: <span class="log-val">darwin/arm64</span></div>
-            <div><span class="log-info">info  </span>Latest version: v0.1.0</div>
-            <div style="margin-top:8px"><span class="log-ok">  ok  </span>Downloaded hudl v0.1.0</div>
-            <div><span class="log-ok">  ok  </span>Installed to /usr/local/bin/hudl</div>
-            <div><span class="log-ok">  ok  </span>Verified: hudl v0.1.0</div>
+      <div class="hero__strip-cell">
+        <div class="hero__strip-key">NVMe</div>
+        <div class="hero__strip-val">Unthrottled storage</div>
+      </div>
+      <div class="hero__strip-cell">
+        <div class="hero__strip-key">Unlimited</div>
+        <div class="hero__strip-val">Egress, no markup</div>
+      </div>
+      <div class="hero__strip-cell">
+        <div class="hero__strip-key">Per second</div>
+        <div class="hero__strip-val">Billing</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Clients rail ─────────────────────────────────────────── -->
+  <section class="clients">
+    <span class="clients__label">Speaks MCP →</span>
+    <div class="clients__list">
+      <span class="clients__item">Claude Code</span>
+      <span class="clients__item">Claude Desktop</span>
+      <span class="clients__item">Cursor</span>
+      <span class="clients__item">Antigravity</span>
+      <span class="clients__item">Windsurf</span>
+      <span class="clients__item">Zed</span>
+      <span class="clients__item">Continue</span>
+    </div>
+  </section>
+
+  <!-- ─── Personas ─────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__inner">
+      <h2 class="headline-xl">
+        Skip the docs.<br>
+        <span class="dim">Skip the dashboard.</span>
+      </h2>
+
+      <div class="personas-grid">
+        <div class="persona">
+          <div class="persona__tag">First-timers</div>
+          <h3 class="persona__h">Publish what your AI built.</h3>
+          <div class="persona__quote">"host my python script on a VM"</div>
+        </div>
+        <div class="persona">
+          <div class="persona__tag">Builders</div>
+          <h3 class="persona__h">Let your agents self-deploy.</h3>
+          <div class="persona__quote">"deploy each generated app to its own box"</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Setup ────────────────────────────────────────────────── -->
+  <section class="section section--bordered section--panel" id="setup">
+    <div class="setup">
+      <h2 class="setup__h">
+        Three steps. <span class="dim">One terminal.</span>
+      </h2>
+
+      <div class="setup__steps">
+        <div class="setup-step">
+          <div class="setup-step__num">01</div>
+          <div class="setup-step__title">Copy the install line</div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-step__num">02</div>
+          <div class="setup-step__title">Paste it into your terminal</div>
+        </div>
+        <div class="setup-step">
+          <div class="setup-step__num">03</div>
+          <div class="setup-step__title">Chat to deploy</div>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab is-active" data-tab="claude" role="tab">Claude Code</button>
+        <button class="tab" data-tab="cursor" role="tab">Cursor</button>
+        <button class="tab" data-tab="antigravity" role="tab">Antigravity</button>
+        <button class="tab" data-tab="manual" role="tab">Manual</button>
+      </div>
+
+      <div class="code-slab" data-slab="claude">
+        <div class="code-slab__cmd">
+          <span class="shell-prompt">$ </span><span class="shell-cmd">claude</span> <span class="shell-cmd">mcp</span> <span class="shell-cmd">add</span> <span class="shell-cmd">huddle01</span> <span class="shell-flag">--</span> <span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span>
+        </div>
+        <button class="copy-btn code-slab__copy" data-text="claude mcp add huddle01 -- npx -y @huddle01/mcp">Copy</button>
+      </div>
+      <div class="code-slab" data-slab="cursor" style="display:none;">
+        <div class="code-slab__cmd">
+          <span class="shell-prompt">$ </span><span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span> <span class="shell-flag">--install</span> <span class="shell-cmd">cursor</span>
+        </div>
+        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp --install cursor">Copy</button>
+      </div>
+      <div class="code-slab" data-slab="antigravity" style="display:none;">
+        <div class="code-slab__cmd">
+          <span class="shell-prompt">$ </span><span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span> <span class="shell-flag">--install</span> <span class="shell-cmd">antigravity</span>
+        </div>
+        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp --install antigravity">Copy</button>
+      </div>
+      <div class="code-slab" data-slab="manual" style="display:none;">
+        <div class="code-slab__cmd">
+          <span class="shell-prompt">$ </span><span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span>
+        </div>
+        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Benchmarks ───────────────────────────────────────────── -->
+  <section class="section section--bordered" id="benchmarks">
+    <div class="section__inner">
+      <div class="bench__head">
+        <h2 class="bench__h">
+          <span class="accent">Faster.</span> <span class="dim">1/3 the price.</span><br>Not even close.
+        </h2>
+        <p class="bench__meta">30+ min sustained · Ubuntu 24.04 LTS (Kernel 6.8) · ffmpeg, Go, make, fio · Open-source · AP-South-1</p>
+      </div>
+
+      <div class="bench__grid">
+        <article class="bench-card">
+          <div class="bench-card__head">
+            <span class="bench-card__title">Web Server</span>
+            <span class="bench-card__sub">— Go, 50 concurrent image requests</span>
+          </div>
+          <div class="bench-rows">
+            <div class="bench-row is-win">
+              <div class="bench-row__name">Huddle01 anton-2</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:100%"></div>
+                <div class="bench-row__value">84.26 RPS</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS c7i.large</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:55%"></div>
+                <div class="bench-row__value">46.18 RPS</div>
+                <div class="bench-row__tag">3× the cost</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS t3.medium</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:34%"></div>
+                <div class="bench-row__value">28.44 RPS</div>
+                <div class="bench-row__tag is-red">CRASHED</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="bench-card">
+          <div class="bench-card__head">
+            <span class="bench-card__title">Video Transcoding</span>
+            <span class="bench-card__sub">— 4K → 1080p (lower is better)</span>
+          </div>
+          <div class="bench-rows">
+            <div class="bench-row is-win">
+              <div class="bench-row__name">Huddle01 anton-2</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:100%"></div>
+                <div class="bench-row__value">13 mins</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS c7i.large</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:68%"></div>
+                <div class="bench-row__value">19 mins</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS t3.medium</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:40%"></div>
+                <div class="bench-row__value">32 mins</div>
+                <div class="bench-row__tag is-red">Throttled</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="bench-card">
+          <div class="bench-card__head">
+            <span class="bench-card__title">CI/CD Build</span>
+            <span class="bench-card__sub">— Redis compilation from source (lower is better)</span>
+          </div>
+          <div class="bench-rows">
+            <div class="bench-row is-win">
+              <div class="bench-row__name">Huddle01 anton-2</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:100%"></div>
+                <div class="bench-row__value">67 sec</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS c7i.large</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:80%"></div>
+                <div class="bench-row__value">84 sec</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS t3.medium</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:52%"></div>
+                <div class="bench-row__value">128 sec</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="bench-card">
+          <div class="bench-card__head">
+            <span class="bench-card__title">Disk I/O</span>
+            <span class="bench-card__sub">— PostgreSQL-style random read/write (IOPS — higher is better)</span>
+          </div>
+          <div class="bench-rows">
+            <div class="bench-row is-win">
+              <div class="bench-row__name">Huddle01 anton-2</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:100%"></div>
+                <div class="bench-row__value">13,380</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS c7i.large</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:17%"></div>
+                <div class="bench-row__value">2,286</div>
+              </div>
+            </div>
+            <div class="bench-row">
+              <div class="bench-row__name">AWS t3.medium</div>
+              <div class="bench-row__bar">
+                <div class="bench-row__fill" style="width:17%"></div>
+                <div class="bench-row__value">2,266</div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="bench__tagline">
+        <span class="accent">5× the IOPS.</span> <span class="accent">7× lower latency.</span> At 1/3 the price.
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Things you can say ───────────────────────────────────── -->
+  <section class="section">
+    <div class="section__inner">
+      <h2 class="headline-xl">
+        Just type it.<br>
+        <span class="dim">Watch it happen.</span>
+      </h2>
+
+      <div class="examples">
+        <div class="example-row">
+          <div class="example-row__text">
+            <div class="example-row__meta">
+              <span class="example-row__num">01</span>
+              <span class="example-row__rule"></span>
+              <span class="example-row__who">first-timer</span>
+            </div>
+            <div class="example-row__say">"set up a VM for my python script"</div>
+          </div>
+          <div class="example-row__demo" data-chat-panel="0"></div>
+        </div>
+
+        <div class="example-row flip">
+          <div class="example-row__text">
+            <div class="example-row__meta">
+              <span class="example-row__num">02</span>
+              <span class="example-row__rule"></span>
+              <span class="example-row__who">builder</span>
+            </div>
+            <div class="example-row__say">"deploy this Next.js repo to a fresh box"</div>
+          </div>
+          <div class="example-row__demo" data-chat-panel="1"></div>
+        </div>
+
+        <div class="example-row">
+          <div class="example-row__text">
+            <div class="example-row__meta">
+              <span class="example-row__num">03</span>
+              <span class="example-row__rule"></span>
+              <span class="example-row__who">either</span>
+            </div>
+            <div class="example-row__say">"how much have my VMs cost this week?"</div>
+          </div>
+          <div class="example-row__demo" data-chat-panel="2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Pricing ──────────────────────────────────────────────── -->
+  <section class="section section--bordered" id="pricing">
+    <div class="section__inner">
+      <div class="pricing-head">
+        <h2 class="pricing-head__heading">
+          No brand tax.<br><span class="dim">No egress markup.</span>
+        </h2>
+        <div class="pricing-head__stat">
+          <div class="pricing-head__stat-value">~70%</div>
+          <div class="pricing-head__stat-label">more affordable than hyperscalers</div>
+        </div>
+      </div>
+
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th>Class</th><th>Compute</th><th>Memory</th><th>Storage</th><th>From</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="cls">Standard</td><td>4 vCPU · AMD EPYC</td><td>16 GB</td><td>160 GB NVMe</td><td class="price">$0.018/hr</td></tr>
+          <tr><td class="cls">Performance</td><td>8 vCPU · AMD EPYC</td><td>32 GB</td><td>320 GB NVMe</td><td class="price">$0.072/hr</td></tr>
+          <tr><td class="cls">Compute+</td><td>16 vCPU · AMD EPYC</td><td>64 GB</td><td>640 GB NVMe</td><td class="price">$0.144/hr</td></tr>
+          <tr><td class="cls">Memory+</td><td>8 vCPU · AMD EPYC</td><td>128 GB</td><td>640 GB NVMe</td><td class="price">$0.260/hr</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pricing-foot">
+        Per-second billing. Unlimited egress on every tier.
+        <a href="https://huddle01.com/pricing" target="_blank" rel="noopener">See full price list →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FAQ ──────────────────────────────────────────────────── -->
+  <section class="section section--bordered section--panel" id="faq">
+    <div class="section__inner">
+      <div class="faq__layout">
+        <div class="faq__heading-wrap">
+          <h2 class="faq__heading">The actual<br>questions.</h2>
+        </div>
+        <div class="faq__list">
+          <div class="faq-item">
+            <button class="faq-toggle">
+              <span class="faq-toggle__num">01</span>
+              <span class="faq-toggle__q">Who is this for?</span>
+              <span class="faq-toggle__icon">+</span>
+            </button>
+            <div class="faq-body"><div class="faq-body__a">Two crowds. Non-developers who want to publish what they're building with an AI assistant — without learning ssh, security groups, and dashboards. And builders who want their multi-agent systems to self-deploy the apps they generate.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">
+              <span class="faq-toggle__num">02</span>
+              <span class="faq-toggle__q">How is this different from AWS / GCP / Azure?</span>
+              <span class="faq-toggle__icon">+</span>
+            </button>
+            <div class="faq-body"><div class="faq-body__a">We're MCP-native — the first VM provider that lets your agent provision infra by chatting. There's no brand tax: you pay for compute, full stop. No egress markup. In practice that lands ~70% below the hyperscalers.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">
+              <span class="faq-toggle__num">03</span>
+              <span class="faq-toggle__q">What's actually inside a VM?</span>
+              <span class="faq-toggle__icon">+</span>
+            </button>
+            <div class="faq-body"><div class="faq-body__a">Dedicated AMD EPYC vCPUs, NVMe-backed storage with no throttling, and unlimited egress across global regions. You get an SSH key, a public IP, and a URL on huddle01.app.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">
+              <span class="faq-toggle__num">04</span>
+              <span class="faq-toggle__q">Which AI tools does it work with?</span>
+              <span class="faq-toggle__icon">+</span>
+            </button>
+            <div class="faq-body"><div class="faq-body__a">Anything that speaks Model Context Protocol — Claude Code, Claude Desktop, Cursor, Antigravity, Windsurf, Zed, Continue. If your tool supports MCP, it supports Huddle01 VMs.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">
+              <span class="faq-toggle__num">05</span>
+              <span class="faq-toggle__q">How is it billed?</span>
+              <span class="faq-toggle__icon">+</span>
+            </button>
+            <div class="faq-body"><div class="faq-body__a">Per second. The moment your VM stops, billing stops. No idle charges, no minimum commitment, no egress surprises.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-toggle">
+              <span class="faq-toggle__num">06</span>
+              <span class="faq-toggle__q">Can I still use a dashboard / CLI?</span>
+              <span class="faq-toggle__icon">+</span>
+            </button>
+            <div class="faq-body"><div class="faq-body__a">Yes. console.huddle01.com gives you the full UI, and there's a CLI for scripts and CI. The MCP server is the third path — pick whichever fits the moment.</div></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MCP -->
-  <section id="mcp" class="block two-col" style="background: var(--paper);">
-    <div class="section-intro">
-      <h2><em class="italic accent">67 tools</em><br />for your agent.</h2>
-      <p>Works with every MCP client.</p>
-      <div class="client-chips">
-        <span>Claude Code</span>
-        <span>Claude Desktop</span>
-        <span>Cursor</span>
-        <span>VS Code Copilot</span>
-        <span>Windsurf</span>
-        <span>Zed</span>
-        <span>Continue</span>
-      </div>
-    </div>
-    <div data-tabgroup="mcp">
-      <div class="tab-row">
-        <button class="tab-btn active" data-tab="claude">Claude</button>
-        <button class="tab-btn" data-tab="npx">npx</button>
-        <button class="tab-btn" data-tab="cursor">Cursor</button>
-        <button class="tab-btn" data-tab="npm">npm</button>
-      </div>
-
-      <div class="tab-content active" data-panel="claude">
-        <div class="tab-cmd">
-          <code><span class="prompt">$ </span>claude mcp add hudl -- npx -y @huddle01/mcp</code>
-          <button class="copy-ghost" data-copy="claude mcp add hudl -- npx -y @huddle01/mcp">Copy</button>
-        </div>
-        <div class="tab-note"><span class="arrow">▸ </span>Adds to Claude Code and Claude Desktop.</div>
-      </div>
-
-      <div class="tab-content" data-panel="npx">
-        <div class="tab-cmd">
-          <code><span class="prompt">$ </span>npx -y @huddle01/mcp</code>
-          <button class="copy-ghost" data-copy="npx -y @huddle01/mcp">Copy</button>
-        </div>
-        <div class="tab-note"><span class="arrow">▸ </span>Run directly. No install needed.</div>
-      </div>
-
-      <div class="tab-content" data-panel="cursor">
-        <div class="tab-cmd">
-          <code><span class="prompt">$ </span>npx -y @huddle01/mcp --install cursor</code>
-          <button class="copy-ghost" data-copy="npx -y @huddle01/mcp --install cursor">Copy</button>
-        </div>
-        <div class="tab-note"><span class="arrow">▸ </span>Auto-configures Cursor's MCP settings.</div>
-      </div>
-
-      <div class="tab-content" data-panel="npm">
-        <div class="tab-cmd">
-          <code><span class="prompt">$ </span>npm install -g @huddle01/mcp</code>
-          <button class="copy-ghost" data-copy="npm install -g @huddle01/mcp">Copy</button>
-        </div>
-        <div class="tab-note"><span class="arrow">▸ </span>Install globally. Then run hudl-mcp. <a href="https://www.npmjs.com/package/@huddle01/mcp">View on npm</a>.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Products -->
-  <section id="products" class="block">
-    <div class="cat-header">
-      <div>
-        <h2>The whole <em class="italic accent">stack</em>.</h2>
-      </div>
-    </div>
-    <div class="cat-grid">
-      <div class="tool">
-        <div class="idx">01 / 06</div>
-        <h3>Virtual Machines</h3>
-        <p>Spin up VMs in seconds. Asia, Europe &amp; North America — pick a region, ship.</p>
-        <div class="foot"><span class="tag">18 regions</span><span class="arrow">→</span></div>
-      </div>
-      <div class="tool">
-        <div class="idx">02 / 06</div>
-        <h3>GPU Compute</h3>
-        <p>H100s from $1.7/hr. AI/ML inference and training at scale.</p>
-        <div class="foot"><span class="tag">from $1.7/hr</span><span class="arrow">→</span></div>
-      </div>
-      <div class="tool">
-        <div class="idx">03 / 06</div>
-        <h3>Managed Kubernetes</h3>
-        <p>Production-ready K8s clusters, no ops overhead. You handle the code.</p>
-        <div class="foot"><span class="tag">managed</span><span class="arrow">→</span></div>
-      </div>
-      <div class="tool">
-        <div class="idx">04 / 06</div>
-        <h3>Block Storage</h3>
-        <p>NVMe-backed volumes. Attach, resize, detach — no downtime.</p>
-        <div class="foot"><span class="tag">NVMe</span><span class="arrow">→</span></div>
-      </div>
-      <div class="tool">
-        <div class="idx">05 / 06</div>
-        <h3>Networking</h3>
-        <p>Floating IPs, security groups, private networks in one place.</p>
-        <div class="foot"><span class="tag">unmetered</span><span class="arrow">→</span></div>
-      </div>
-      <div class="tool">
-        <div class="idx">06 / 06</div>
-        <h3>Load Balancers</h3>
-        <p>Health checks, SSL termination, zero-downtime traffic routing.</p>
-        <div class="foot"><span class="tag">L4 + L7</span><span class="arrow">→</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Changelog -->
-  <section class="block two-col" style="background: var(--paper);">
-    <div class="section-intro">
-      <h2 style="font-size:44px">Changelog.</h2>
-    </div>
-    <div>
-      <div class="changelog-row">
-        <div class="v">v0.1.0</div>
-        <div class="date">Apr 2026</div>
-        <ul>
-          <li>Initial release</li>
-          <li>67 MCP tools</li>
-          <li>macOS, Linux, Windows binaries</li>
-          <li>Homebrew tap live</li>
-        </ul>
-      </div>
-      <div class="changelog-row">
-        <div class="v">v0.0.9</div>
-        <div class="date">Apr 2026</div>
-        <ul>
-          <li>Private beta</li>
-          <li>Core VM + GPU commands</li>
-          <li>MCP transport hardened</li>
-        </ul>
-      </div>
-      <div class="changelog-row">
-        <div class="v">v0.0.5</div>
-        <div class="date">Mar 2026</div>
-        <ul>
-          <li>Internal preview</li>
-          <li>Region + SSH key management</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="block two-col">
-    <div class="section-intro">
-      <h2 style="font-size:44px">FAQ.</h2>
-    </div>
-    <div id="faq-list">
-      <div class="faq-item open">
-        <button class="faq-btn"><span class="q">What is hudl?</span><span class="plus">+</span></button>
-        <div class="faq-answer">A command-line interface and MCP server for managing Huddle01 Cloud infrastructure — VMs, GPUs, Kubernetes, storage, and networking.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-btn"><span class="q">What is an MCP server?</span><span class="plus">+</span></button>
-        <div class="faq-answer">Model Context Protocol lets AI agents (Claude, Cursor, Copilot) call tools. Our MCP exposes 67 infrastructure operations to your agent.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-btn"><span class="q">Does it work on Windows?</span><span class="plus">+</span></button>
-        <div class="faq-answer">Yes. Install via PowerShell with <code>irm https://get.huddle01.com/hudl.ps1 | iex</code> or grab the release binary.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-btn"><span class="q">Is it open source?</span><span class="plus">+</span></button>
-        <div class="faq-answer">Yes. MIT-licensed. Source lives at <a href="https://github.com/Huddle01/get-hudl">github.com/Huddle01/get-hudl</a>. PRs welcome.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-btn"><span class="q">Do I need an account?</span><span class="plus">+</span></button>
-        <div class="faq-answer">To run commands against the Cloud API, yes. Sign up at <a href="https://console.huddle01.com">console.huddle01.com</a> — the CLI walks you through auth on first run.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-btn"><span class="q">How does auth work?</span><span class="plus">+</span></button>
-        <div class="faq-answer">OAuth device flow. <code>hudl auth login</code> opens the console, you approve, tokens land in <code>~/.config/hudl/</code>.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
+  <!-- ─── CTA ──────────────────────────────────────────────────── -->
   <section class="cta">
-    <div class="eyebrow">Get started</div>
-    <h2>Ship from your <em class="italic accent">terminal</em>.</h2>
-    <div class="actions">
-      <a href="https://github.com/Huddle01/get-hudl/releases/latest" class="btn btn-primary btn-lg">Install CLI</a>
-      <a href="https://console.huddle01.com/docs/cli" class="btn btn-ghost">Read the docs →</a>
+    <h2 class="cta__h">
+      Stop clicking.<br>
+      <span class="accent">Start chatting.</span>
+    </h2>
+    <div class="cta__buttons">
+      <a class="btn btn--primary btn--lg" href="#setup">Install the MCP server</a>
+      <a class="btn btn--secondary btn--lg" href="https://www.producthunt.com/products/huddle01" target="_blank" rel="noopener">Upvote on Product Hunt ↗</a>
+      <a class="btn btn--ghost" href="https://discord.gg/huddle01" target="_blank" rel="noopener">Join the Discord →</a>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="left">
-      <img src="https://cloudobjects.huddle01.media/full_logo_light.png" alt="Huddle01" />
-      <span>· hudl v0.1.0</span>
+  <!-- ─── Footer ───────────────────────────────────────────────── -->
+  <footer class="foot">
+    <img class="foot__logo" src="https://cloudobjects.huddle01.media/full_logo_light.png" alt="Huddle01" />
+    <span class="foot__id">· hudl v0.1</span>
+    <div class="foot__spacer"></div>
+    <div class="foot__links">
+      <a href="https://docs.huddle01.com" target="_blank" rel="noopener">docs</a>
+      <a href="https://discord.gg/huddle01" target="_blank" rel="noopener">discord</a>
+      <a href="https://github.com/Huddle01" target="_blank" rel="noopener">github</a>
+      <a href="https://console.huddle01.com" target="_blank" rel="noopener">console</a>
+      <a href="https://status.huddle01.com" target="_blank" rel="noopener">status</a>
     </div>
-    <div class="links">
-      <a href="https://console.huddle01.com/docs/cli">Docs</a>
-      <a href="https://github.com/Huddle01/get-hudl">GitHub</a>
-      <a href="https://www.npmjs.com/package/@huddle01/mcp">npm</a>
-      <a href="https://console.huddle01.com">Console</a>
-    </div>
-    <span class="copy">© 2026 Graphene01 Inc.</span>
+    <div class="foot__copy">© 2026 Huddle01</div>
   </footer>
 
-</div>
-
-<script>
-  // Copy-to-clipboard
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-copy]');
-    if (!btn) return;
-    const text = btn.getAttribute('data-copy');
-    navigator.clipboard?.writeText(text);
-    const original = btn.textContent;
-    btn.textContent = '✓ Copied';
-    btn.classList.add('copied');
-    clearTimeout(btn._t);
-    btn._t = setTimeout(() => {
-      btn.textContent = original;
-      btn.classList.remove('copied');
-    }, 1600);
-  });
-
-  // Tabs
-  document.querySelectorAll('[data-tabgroup]').forEach((group) => {
-    group.addEventListener('click', (e) => {
-      const tab = e.target.closest('.tab-btn');
-      if (!tab) return;
-      const id = tab.dataset.tab;
-      group.querySelectorAll('.tab-btn').forEach((b) => b.classList.toggle('active', b === tab));
-      group.querySelectorAll('.tab-content').forEach((p) => p.classList.toggle('active', p.dataset.panel === id));
-    });
-  });
-
-  // FAQ accordion
-  document.getElementById('faq-list').addEventListener('click', (e) => {
-    const btn = e.target.closest('.faq-btn');
-    if (!btn) return;
-    const item = btn.parentElement;
-    const open = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach((i) => i.classList.remove('open'));
-    if (!open) item.classList.add('open');
-  });
-
-  // Terminal typewriter
-  (function () {
-    const text = 'curl -fsSL https://get.huddle01.com/hudl | sh';
-    const typed = document.getElementById('typed');
-    const cursor = document.getElementById('cursor');
-    const after = document.getElementById('after');
-    if (!typed) return;
-    let i = 0;
-    const speed = 35;
-    const start = setTimeout(function tick() {
-      i++;
-      typed.textContent = text.slice(0, i);
-      if (i >= text.length) {
-        cursor.style.display = 'none';
-        after.classList.remove('hidden');
-        after.classList.add('reveal');
-        return;
-      }
-      setTimeout(tick, speed);
-    }, 400);
-  })();
-</script>
-
+  <script src="/js/copy.js" defer></script>
+  <script src="/js/faq.js" defer></script>
+  <script src="/js/setup-tabs.js" defer></script>
+  <script src="/js/agent-chat.js" defer></script>
 </body>
 </html>

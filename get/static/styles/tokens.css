@@ -1,0 +1,32 @@
+:root {
+  --bg: #0a0d0f;
+  --ink: #f0f4f3;
+  --mute: #7a8688;
+  --dim: #3a4244;
+  --line: rgba(255, 255, 255, 0.06);
+  --line2: rgba(255, 255, 255, 0.12);
+  --accent: #7ff0d6;
+  --accent-soft: rgba(127, 240, 214, 0.10);
+  --accent-soft-2: rgba(127, 240, 214, 0.18);
+  --panel: #0f1315;
+  --code: #070a0c;
+  --tag-red-bg: rgba(255, 90, 110, 0.12);
+  --tag-red-ink: #ff7a8a;
+  --tag-cost-bg: rgba(255, 180, 80, 0.10);
+  --tag-cost-ink: #ffb152;
+
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --display: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'Berkeley Mono', ui-monospace, Menlo, monospace;
+
+  --gutter: 56px;
+  --section-pad-y: 120px;
+  --max-w: 1280px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --gutter: 24px;
+    --section-pad-y: 80px;
+  }
+}
