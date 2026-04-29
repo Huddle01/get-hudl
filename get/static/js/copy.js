@@ -36,5 +36,14 @@ document.addEventListener('click', (e) => {
     : null;
   const text = targetEl ? targetEl.textContent.trim() : btn.getAttribute('data-text') || '';
   if (!text) return;
-  copyText(text).then(() => flashCopied(btn));
+  copyText(text).then(() => {
+    flashCopied(btn);
+    document.dispatchEvent(new CustomEvent('hudl:copied', {
+      detail: {
+        context: btn.getAttribute('data-ph-copy-context') || 'unknown',
+        client: btn.getAttribute('data-ph-client') || 'unknown',
+        text,
+      },
+    }));
+  });
 });

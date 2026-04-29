@@ -167,6 +167,15 @@ cd get
 make deploy         # Deploy to Vercel production
 ```
 
+### PostHog analytics for the installer site
+
+The installer site can emit PostHog analytics without hardcoding project settings into the repo. At runtime, `get/api/posthog-config.js` reads these Vercel environment variables and exposes them to the static page:
+
+- `HUDL_POSTHOG_API_KEY` — PostHog project API key
+- `HUDL_POSTHOG_API_HOST` — optional, defaults to `https://us.i.posthog.com`
+
+If `HUDL_POSTHOG_API_KEY` is unset, analytics stays disabled. The current integration captures `$pageview` automatically plus a small set of explicit conversion events such as `cta clicked`, `setup client selected`, and `install command copied`.
+
 ### Release flow
 
 ```
