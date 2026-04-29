@@ -215,6 +215,7 @@
   letter-spacing: -0.03em;
   font-size: 22px;
   color: var(--dim);
+  text-decoration: none;
   transition: color 0.2s ease;
 }
 
