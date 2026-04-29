@@ -1,0 +1,41 @@
+get/static/index.html
+  9945dea436f1e9c4 59,74,77,80,128,133,137-141,198-202,344-348,397-401,436-440,458,466,482,498,514,525
+  1620b084345b9d1f 108-113,211
+get/static/styles/components.css
+  9945dea436f1e9c4 420-446
+get/static/styles/sections.css
+  1620b084345b9d1f 218
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "2d54b509058bd6d852aa8b3a2f3af0b0f504d345",
+  "prompts": {
+    "1620b084345b9d1f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c728ef51-fe42-400d-bcc0-88e8e959f631",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 9,
+      "total_deletions": 24,
+      "accepted_lines": 9,
+      "overriden_lines": 0
+    },
+    "9945dea436f1e9c4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1361701e-3fef-4eeb-9d87-12546f50d240",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Om Gupta",
+      "messages": [],
+      "total_additions": 81,
+      "total_deletions": 14,
+      "accepted_lines": 64,
+      "overriden_lines": 0
+    }
+  }
+}
