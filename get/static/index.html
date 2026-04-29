@@ -55,15 +55,15 @@
     <div class="nav__spacer"></div>
     <div class="nav__links">
       <a href="#pricing">Pricing</a>
-      <a href="https://docs.huddle01.com" target="_blank" rel="noopener">Docs</a>
-      <a href="https://discord.gg/ep7gv8RQ" target="_blank" rel="noopener">Discord</a>
-      <a href="https://console.huddle01.com" target="_blank" rel="noopener" class="nav__cta">Console</a>
+      <a href="https://docs.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="nav" data-ph-label="docs">Docs</a>
+      <a href="https://discord.gg/ep7gv8RQ" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="nav" data-ph-label="discord">Discord</a>
+      <a href="https://console.huddle01.com" target="_blank" rel="noopener" class="nav__cta" data-ph-event="cta clicked" data-ph-location="nav" data-ph-label="console">Console</a>
     </div>
   </nav>
 
   <!-- ─── Hero ─────────────────────────────────────────────────── -->
   <section class="hero">
-    <a class="ph-chip" href="https://www.producthunt.com/products/huddle01" target="_blank" rel="noopener">
+    <a class="ph-chip" href="https://www.producthunt.com/products/huddle01" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="hero" data-ph-label="producthunt">
       <svg class="ph-chip__cat" width="18" height="18" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#da552f"/><path d="M22.7 13.3h-7v13.4h3.4v-3.8h3.6c2.7 0 4.8-2.2 4.8-4.8s-2.1-4.8-4.8-4.8zm-.2 6.8h-3.4v-3.9h3.4c1.1 0 2 .9 2 1.9s-.9 2-2 2z" fill="#fff"/></svg>
       <span class="ph-chip__text">We just launched on Product Hunt</span>
       <span class="ph-chip__arrow" aria-hidden="true">→</span>
@@ -77,8 +77,8 @@
     <p class="hero__sub">Just ask Claude, ChatGPT, or Cursor. Get a VM.</p>
 
     <div class="hero__cta">
-      <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener">Try it on Claude</a>
-      <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
+      <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="hero" data-ph-label="try-on-claude">Try it on Claude</a>
+      <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="hero" data-ph-label="open-console">Open the Console →</a>
     </div>
 
     <div class="hero__strip">
@@ -136,8 +136,8 @@
       </div>
 
       <div class="section-cta">
-        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener">Try it on Claude</a>
-        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
+        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="personas" data-ph-label="try-on-claude">Try it on Claude</a>
+        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="personas" data-ph-label="open-console">Open the Console →</a>
       </div>
     </div>
   </section>
@@ -175,30 +175,30 @@
         <div class="code-slab__cmd">
           <span class="shell-prompt">$ </span><span class="shell-cmd">claude</span> <span class="shell-cmd">mcp</span> <span class="shell-cmd">add</span> <span class="shell-cmd">huddle01</span> <span class="shell-flag">--</span> <span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span>
         </div>
-        <button class="copy-btn code-slab__copy" data-text="claude mcp add huddle01 -- npx -y @huddle01/mcp">Copy</button>
+        <button class="copy-btn code-slab__copy" data-text="claude mcp add huddle01 -- npx -y @huddle01/mcp" data-ph-copy-context="setup" data-ph-client="claude">Copy</button>
       </div>
       <div class="code-slab" data-slab="cursor" style="display:none;">
         <div class="code-slab__cmd">
           <span class="shell-prompt">$ </span><span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span> <span class="shell-flag">--install</span> <span class="shell-cmd">cursor</span>
         </div>
-        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp --install cursor">Copy</button>
+        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp --install cursor" data-ph-copy-context="setup" data-ph-client="cursor">Copy</button>
       </div>
       <div class="code-slab" data-slab="antigravity" style="display:none;">
         <div class="code-slab__cmd">
           <span class="shell-prompt">$ </span><span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span> <span class="shell-flag">--install</span> <span class="shell-cmd">antigravity</span>
         </div>
-        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp --install antigravity">Copy</button>
+        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp --install antigravity" data-ph-copy-context="setup" data-ph-client="antigravity">Copy</button>
       </div>
       <div class="code-slab" data-slab="manual" style="display:none;">
         <div class="code-slab__cmd">
           <span class="shell-prompt">$ </span><span class="shell-cmd">npx</span> <span class="shell-flag">-y</span> <span class="shell-cmd">@huddle01/mcp</span>
         </div>
-        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp">Copy</button>
+        <button class="copy-btn code-slab__copy" data-text="npx -y @huddle01/mcp" data-ph-copy-context="setup" data-ph-client="manual">Copy</button>
       </div>
 
       <div class="section-cta">
-        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener">Try it on Claude</a>
-        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
+        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="setup" data-ph-label="try-on-claude">Try it on Claude</a>
+        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="setup" data-ph-label="open-console">Open the Console →</a>
       </div>
     </div>
   </section>
@@ -343,8 +343,8 @@
       </div>
 
       <div class="section-cta">
-        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener">Try it on Claude</a>
-        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
+        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="benchmarks" data-ph-label="try-on-claude">Try it on Claude</a>
+        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="benchmarks" data-ph-label="open-console">Open the Console →</a>
       </div>
     </div>
   </section>
@@ -396,8 +396,8 @@
       </div>
 
       <div class="section-cta">
-        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener">Try it on Claude</a>
-        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
+        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="pricing" data-ph-label="try-on-claude">Try it on Claude</a>
+        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="pricing" data-ph-label="open-console">Open the Console →</a>
       </div>
     </div>
   </section>
@@ -431,12 +431,12 @@
 
       <div class="pricing-foot">
         Per-second billing. Unlimited egress on every tier.
-        <a href="https://huddle01.com/pricing" target="_blank" rel="noopener">See full price list →</a>
+        <a href="https://huddle01.com/pricing" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="pricing" data-ph-label="full-price-list">See full price list →</a>
       </div>
 
       <div class="section-cta">
-        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener">Try it on Claude</a>
-        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener">Open the Console →</a>
+        <a class="btn btn--primary" data-cta="claude" href="https://claude.ai/new?q=Install%20the%20Huddle01%20MCP%20server%20so%20you%20can%20spin%20up%20cloud%20VMs%20for%20me%20from%20this%20chat.%20Run%20this%20in%20my%20terminal%3A%20claude%20mcp%20add%20huddle01%20--%20npx%20-y%20%40huddle01%2Fmcp%20%E2%80%94%20then%20verify%20the%20Huddle01%20tools%20are%20available%20and%20help%20me%20launch%20my%20first%20VM." target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="faq" data-ph-label="try-on-claude">Try it on Claude</a>
+        <a class="btn btn--secondary" href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="faq" data-ph-label="open-console">Open the Console →</a>
       </div>
     </div>
   </section>
@@ -509,9 +509,9 @@
       <span class="accent">Start chatting.</span>
     </h2>
     <div class="cta__buttons">
-      <a class="btn btn--primary btn--lg" href="#setup">Install the MCP server</a>
-      <a class="btn btn--secondary btn--lg" href="https://www.producthunt.com/products/huddle01" target="_blank" rel="noopener">Upvote on Product Hunt ↗</a>
-      <a class="btn btn--ghost" href="https://discord.gg/ep7gv8RQ" target="_blank" rel="noopener">Join the Discord →</a>
+      <a class="btn btn--primary btn--lg" href="#setup" data-ph-event="cta clicked" data-ph-location="footer-cta" data-ph-label="install-mcp-server">Install the MCP server</a>
+      <a class="btn btn--secondary btn--lg" href="https://www.producthunt.com/products/huddle01" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer-cta" data-ph-label="upvote-producthunt">Upvote on Product Hunt ↗</a>
+      <a class="btn btn--ghost" href="https://discord.gg/ep7gv8RQ" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer-cta" data-ph-label="join-discord">Join the Discord →</a>
     </div>
   </section>
 
@@ -521,15 +521,16 @@
     <span class="foot__id">· hudl v0.1</span>
     <div class="foot__spacer"></div>
     <div class="foot__links">
-      <a href="https://docs.huddle01.com" target="_blank" rel="noopener">docs</a>
-      <a href="https://discord.gg/ep7gv8RQ" target="_blank" rel="noopener">discord</a>
-      <a href="https://github.com/Huddle01" target="_blank" rel="noopener">github</a>
-      <a href="https://console.huddle01.com" target="_blank" rel="noopener">console</a>
-      <a href="https://status.huddle01.com" target="_blank" rel="noopener">status</a>
+      <a href="https://docs.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer" data-ph-label="docs">docs</a>
+      <a href="https://discord.gg/ep7gv8RQ" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer" data-ph-label="discord">discord</a>
+      <a href="https://github.com/Huddle01" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer" data-ph-label="github">github</a>
+      <a href="https://console.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer" data-ph-label="console">console</a>
+      <a href="https://status.huddle01.com" target="_blank" rel="noopener" data-ph-event="cta clicked" data-ph-location="footer" data-ph-label="status">status</a>
     </div>
     <div class="foot__copy">© 2026 Huddle01</div>
   </footer>
 
+  <script src="/js/analytics.js" defer></script>
   <script src="/js/copy.js" defer></script>
   <script src="/js/faq.js" defer></script>
   <script src="/js/setup-tabs.js" defer></script>

@@ -7,6 +7,9 @@ function activate(id) {
   slabs.forEach((s) => {
     s.style.display = s.getAttribute('data-slab') === id ? 'block' : 'none';
   });
+  document.dispatchEvent(new CustomEvent('hudl:setup-tab-changed', {
+    detail: { client: id },
+  }));
 }
 
 tabs.forEach((t) => {
